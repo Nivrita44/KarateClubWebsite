@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home";
+import InstructorProfile from "./pages/InstructorProfile";
 import Instructors from "./pages/Instructors";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
@@ -19,6 +20,10 @@ const App = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/my-profile" element={<Profile />} />
+        <Route
+          path="/instructor-profile/:docId"
+          element={<InstructorProfile />}
+        />
       </Routes>
     </div>
   );
