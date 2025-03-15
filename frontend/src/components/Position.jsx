@@ -1,6 +1,6 @@
 import React from "react";
 
-const Speciality = () => {
+const Position = () => {
   return (
     <div className="text-center mt-16 px-6">
       <p className="text-2xl font-medium pb-4">
@@ -18,4 +18,4 @@ const Speciality = () => {
   );
 };
 
-export default Speciality;
+export default Position;

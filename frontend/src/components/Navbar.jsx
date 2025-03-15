@@ -4,13 +4,13 @@ import { assets } from "../assets/assets";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [showMenu, setShowMenu] = useState(false);
-  const [token, setToken] = useState(true);
+  // const [showMenu, setShowMenu] = useState(false);
+  const [token, setToken] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
     <div className="flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400">
-      <img className="w-44 cursor-pointer" src={assets.logo} alt="Logo" />
+      <img onClick={()=>navigate('/')} className="w-44 cursor-pointer" src={assets.logo} alt="Logo" />
 
       <ul className="hidden md:flex items-start gap-5 font-medium">
         <NavLink to="/">
@@ -93,7 +93,7 @@ const Navbar = () => {
           </div>
         ) : (
           <button
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/join-us")}
             className="bg-primary text-white px-8 py-3 rounded-full font-light hidden md:block"
           >
             Join Us

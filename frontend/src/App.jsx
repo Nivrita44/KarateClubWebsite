@@ -9,6 +9,10 @@ import InstructorProfile from "./pages/InstructorProfile";
 import Instructors from "./pages/Instructors";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
+import Gallery from "./pages/Gallery";
+import JoinUsPage from "./pages/JoinUs";
+import PendingPage from "./pages/PendingPage";
+import PaymentPage from "./pages/PaymentPage";
 
 const App = () => {
   return (
@@ -18,7 +22,11 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/instructors" element={<Instructors />} />
         <Route path="/about" element={<About />} />
+        <Route path="/gallery" element={<Gallery />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/join-us" element={<JoinUsPage />} />
+        <Route path="/pending" element={<PendingPage />} />
+        <Route path="/payment" element={<PaymentPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/my-profile" element={<Profile />} />
         <Route
