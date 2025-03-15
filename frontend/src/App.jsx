@@ -1,9 +1,4 @@
 import React from "react";
-<<<<<<< HEAD
-
-const App = () => {
-  return <div></div>;
-=======
 import { Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
@@ -46,7 +41,6 @@ const App = () => {
       <Footer />
     </div>
   );
->>>>>>> feature/AdmissionForm
 };
 
 export default App;
