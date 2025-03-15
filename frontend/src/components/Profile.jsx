@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { assets } from "../assets/assets"; 
 
 const Profile = () => {
- 
+  // State to manage user profile data
   const [userData, setUserData] = useState({
     name: "John Doe",
     institute: "Shahjalal University of Science and Technology, Sylhet",
@@ -10,11 +9,13 @@ const Profile = () => {
     gender: "Male",
     belt: "Black Belt",
     certification: "National Karate Championship",
-    picture: assets.profile_pic, 
+    picture: "https://via.placeholder.com/100",
   });
 
+  // State to control edit mode
   const [isEdit, setIsEdit] = useState(false);
 
+  // Handle input changes
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
