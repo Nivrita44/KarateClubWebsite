@@ -1,62 +1,91 @@
-import React, { useState } from "react";
+import React, { useState, useRef , useEffect} from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  // const [showMenu, setShowMenu] = useState(false);
-  const [token, setToken] = useState(false);
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token") ? true : false;
+  });
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const timeoutRef = useRef(null);
+
+ useEffect(() => {
+   const storedToken = localStorage.getItem("token");
+   setToken(storedToken ? true : false);
+ }, []);
+
+
+  const openDropdown = () => {
+    setIsDropdownOpen(true);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+  };
+
+  const delayedCloseDropdown = () => {
+    timeoutRef.current = setTimeout(() => {
+      setIsDropdownOpen(false);
+    }, 1000);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setToken(false);
+    navigate("/");
+  };
 
   return (
     <div className="flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400">
-      <img onClick={()=>navigate('/')} className="w-44 cursor-pointer" src={assets.logo} alt="Logo" />
+      <img
+        onClick={() => navigate("/")}
+        className="w-44 cursor-pointer"
+        src={assets.logo}
+        alt="Logo"
+      />
 
       <ul className="hidden md:flex items-start gap-5 font-medium">
         <NavLink to="/">
           <li className="py-1">HOME</li>
-          <hr className="border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden" />
         </NavLink>
 
         <NavLink to="/instructors">
           <li className="py-1">ALL INSTRUCTORS</li>
-          <hr className="border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden" />
         </NavLink>
 
         <NavLink to="/about">
           <li className="py-1">ABOUT CLUB</li>
-          <hr className="border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden" />
         </NavLink>
 
-        <div className="relative">
-          <button
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="py-1"
-          >
+        {/* Dropdown for EVENTS */}
+        <div
+          className="relative"
+          onMouseEnter={openDropdown}
+          onMouseLeave={delayedCloseDropdown}>
+          <button className="py-1" onClick={openDropdown}>
             EVENTS
           </button>
-          <hr className="border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden" />
 
           {isDropdownOpen && (
-            <div className="absolute left-0 mt-2 w-40 bg-white shadow-md rounded-lg border">
+            <div
+              className="absolute left-0 mt-2 w-40 bg-white shadow-md rounded-lg border"
+              onMouseEnter={openDropdown}
+              onMouseLeave={delayedCloseDropdown}>
               <NavLink
                 to="/events/previous"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
+                className="block px-4 py-2 hover:bg-gray-100">
                 Previous Events
               </NavLink>
               <NavLink
                 to="/events/upcoming"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
+                className="block px-4 py-2 hover:bg-gray-100">
                 Upcoming Events
               </NavLink>
             </div>
           )}
         </div>
+
         <NavLink to="/gallery">
           <li className="py-1">GALLERY</li>
-          <hr className="border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden" />
         </NavLink>
       </ul>
 
@@ -77,15 +106,13 @@ const Navbar = () => {
               <div className="min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4">
                 <p
                   onClick={() => navigate("/my-profile")}
-                  className="hover:text-black cursor-pointer"
-                >
+                  className="hover:text-black cursor-pointer">
                   My Profile
                 </p>
                 <p className="hover:text-black cursor-pointer">My Classes</p>
                 <p
-                  onClick={() => setToken(false)}
-                  className="hover:text-black cursor-pointer"
-                >
+                  onClick={handleLogout}
+                  className="hover:text-black cursor-pointer">
                   Logout
                 </p>
               </div>
@@ -94,8 +121,7 @@ const Navbar = () => {
         ) : (
           <button
             onClick={() => navigate("/join-us")}
-            className="bg-primary text-white px-8 py-3 rounded-full font-light hidden md:block"
-          >
+            className="bg-primary text-white px-8 py-3 rounded-full font-light hidden md:block">
             Join Us
           </button>
         )}

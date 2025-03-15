@@ -17,7 +17,8 @@ const JoinUs = () => {
     weight: "",
     currentAddress: "",
     permanentAddress: "",
-    phone: "",
+      phone: "",
+    password: "",
     email: "",
     nationalID: "",
     religion: "",
@@ -116,8 +117,9 @@ const JoinUs = () => {
               className="w-full border p-2 rounded"
               required>
               <option value="">Select</option>
-              <option value="Main Campus">Main Campus</option>
-              <option value="Permanent Campus">Permanent Campus</option>
+              <option value="SUST">SUST</option>
+              <option value="SUST-School">SUST-School</option>
+              <option value="Outside">Outside of SUST</option>
             </select>
           </div>
         </div>
@@ -165,7 +167,7 @@ const JoinUs = () => {
             />
           </div>
           <div>
-            <label className="block font-medium">Height (cm)</label>
+            <label className="block font-medium">Height (ft)</label>
             <input
               type="text"
               name="height"
@@ -226,6 +228,30 @@ const JoinUs = () => {
         </div>
 
         <div className="mt-4">
+          <label className="block font-medium">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+            required
+          />
+        </div>
+
+        <div className="mt-4">
+          <label className="block font-medium">Password</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+            required
+          />
+        </div>
+
+        <div className="mt-4">
           <label className="block font-medium">National ID</label>
           <input
             type="text"
@@ -268,6 +294,16 @@ const JoinUs = () => {
             className="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800">
             Submit Application
           </button>
+        </div>
+        <div className="mt-6 text-center">
+          <p className="text-gray-600">
+            Already a member of the club?{" "}
+            <span
+              className="text-blue-600 cursor-pointer hover:underline"
+              onClick={() => navigate("/login")}>
+              Login
+            </span>
+          </p>
         </div>
       </form>
     </section>

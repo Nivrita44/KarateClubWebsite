@@ -6,7 +6,7 @@ const PaymentPage = () => {
 
   const handlePayment = () => {
     alert("Payment Successful! You will receive your Membership ID soon.");
-    navigate("/login"); // Redirect to login after payment
+    navigate("/login");
   };
 
   return (
