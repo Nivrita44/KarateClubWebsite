@@ -4,7 +4,7 @@ const db = mysql.createConnection({
     host: 'localhost', // Example: '192.168.1.100' or domain
     user: 'root',
     password: '',
-    database: 'SUST_Karate_Club'
+    database: 'sust_karate_club'
 });
 
 const createNewTableQuery = `
