@@ -29,34 +29,25 @@ const JoinUs = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const [image, setImage] = useState(null);
-
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
-  };
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formDataToSend = new FormData();
-    for (const key in formData) {
-      formDataToSend.append(key, formData[key]);
-    }
-    if (image) {
-      formDataToSend.append("image", image);
-    }
-
+    // Send the form data to the backend API using fetch
     try {
       const response = await fetch("http://localhost:4000/api/join", {
         method: "POST",
-        body: formDataToSend,
+        headers: {
+          "Content-Type": "application/json", // Make sure to send as JSON
+        },
+        body: JSON.stringify(formData), // Send the form data as JSON
       });
 
       const data = await response.json();
+      console.log(data);
+
       if (response.ok) {
         alert("Student added successfully!");
-        navigate("/pending");
+        navigate("/pending"); // Redirect after successful submission
       } else {
         alert("Error adding student");
       }
@@ -65,7 +56,6 @@ const JoinUs = () => {
       alert("Error sending request");
     }
   };
-
 
   return (
     <section className="container mx-auto px-6 py-12">
@@ -308,17 +298,6 @@ const JoinUs = () => {
               required
             />
           </div>
-          <div className="mt-4">
-            <label className="block font-medium">Profile Picture</label>
-            <input
-              type="file"
-              name="image"
-              onChange={handleImageChange}
-              className="w-full border p-2 rounded"
-              required
-            />
-          </div>
-
           <div>
             <label className="block font-medium">Previous Experience</label>
             <textarea
