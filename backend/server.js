@@ -1,3 +1,4 @@
+
 import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
@@ -13,6 +14,7 @@ db.connect(err => {
 });
 
 
+
 //app config
 const app = express()
 const port = process.env.PORT || 4000
@@ -20,6 +22,7 @@ const port = process.env.PORT || 4000
 //middlewares
 app.use(express.json())
 app.use(cors())
+
 
 // API Route for inserting data into MySQL
 app.post('/api/join', (req, res) => {
@@ -68,6 +71,7 @@ app.post('/api/join', (req, res) => {
 
 
 //api endpoints
+
 app.get('/', (req, res) => {
     res.send('API WORKING')
 })

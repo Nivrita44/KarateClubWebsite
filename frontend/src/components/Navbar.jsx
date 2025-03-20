@@ -4,6 +4,7 @@ import { assets } from "../assets/assets";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const [showMenu, setShowMenu] = useState(false);
   const [token, setToken] = useState(() => {
     return localStorage.getItem("token") ? true : false;
   });
@@ -125,6 +126,46 @@ const Navbar = () => {
             Join Us
           </button>
         )}
+        <img
+          onClick={() => setShowMenu(true)}
+          src={assets.menu_icon}
+          alt=""
+          className="w-6 md:hidden"
+        />
+        {/** Mobile Menu */}
+        <div
+          className={`${
+            showMenu ? "fixed w-full" : "h-0 w-0"
+          } md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}>
+          <div className="flex justify-between items-center px-5 py-6">
+            <img className="w-36" src={assets.logo} alt="" />
+            <img
+              className="w-6"
+              onClick={() => setShowMenu(false)}
+              src={assets.cross_icon}
+              alt=""
+            />
+          </div>
+          <ul className="flex flex-col items-center gap-3 mt-5 px-5 text-lg font-medium">
+            <NavLink
+              onClick={() => setShowMenu(false)}
+              to="/">
+              <p className="px-4 py-2 rounded inline-block">Home</p>
+            </NavLink>
+            <NavLink onClick={() => setShowMenu(false)} to="/instructors">
+              <p className="px-4 py-2 rounded inline-block">ALL INSTRUCTORS</p>
+            </NavLink>
+            <NavLink onClick={() => setShowMenu(false)} to="/about">
+              <p className="px-4 py-2 rounded inline-block">ABOUT CLUB</p>
+            </NavLink>
+            <NavLink onClick={() => setShowMenu(false)} to="/events">
+              <p className="px-4 py-2 rounded inline-block">EVENTS</p>
+            </NavLink>
+            <NavLink onClick={() => setShowMenu(false)} to="/gallery">
+              <p className="px-4 py-2 rounded inline-block">GALLERY</p>
+            </NavLink>
+          </ul>
+        </div>
       </div>
     </div>
   );
