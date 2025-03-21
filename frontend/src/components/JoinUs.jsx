@@ -17,7 +17,7 @@ const JoinUs = () => {
     weight: "",
     currentAddress: "",
     permanentAddress: "",
-      phone: "",
+    phone: "",
     password: "",
     email: "",
     nationalID: "",
@@ -31,29 +31,29 @@ const JoinUs = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("📤 Sending Data:", formData);
 
-    // Send the form data to the backend API using fetch
     try {
       const response = await fetch("http://localhost:4000/api/join", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // Make sure to send as JSON
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData), // Send the form data as JSON
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
-      console.log(data);
+      console.log("📥 Server Response:", data);
 
       if (response.ok) {
-        alert("Student added successfully!");
-        navigate("/pending"); // Redirect after successful submission
+        alert("✅ Form submitted successfully!");
+        navigate(`/payment/${data.id}`);
       } else {
-        alert("Error adding student");
+        alert(`❌ Submission failed: ${data.message}`);
       }
     } catch (error) {
-      console.error("Error:", error);
-      alert("Error sending request");
+      console.error("❌ Error submitting form:", error);
+      alert("❌ Failed to submit form. Please try again.");
     }
   };
 
@@ -64,7 +64,8 @@ const JoinUs = () => {
       </h2>
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
+        className="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto"
+      >
         {/* Name & Guardian Details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -137,7 +138,8 @@ const JoinUs = () => {
               value={formData.campus}
               onChange={handleChange}
               className="w-full border p-2 rounded"
-              required>
+              required
+            >
               <option value="">Select</option>
               <option value="SUST">SUST</option>
               <option value="SUST-School">SUST-School</option>
@@ -166,7 +168,8 @@ const JoinUs = () => {
               value={formData.gender}
               onChange={handleChange}
               className="w-full border p-2 rounded"
-              required>
+              required
+            >
               <option value="">Select</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -305,7 +308,8 @@ const JoinUs = () => {
               value={formData.previousExperience}
               onChange={handleChange}
               className="w-full border p-2 rounded"
-              rows="2"></textarea>
+              rows="2"
+            ></textarea>
           </div>
         </div>
 
@@ -313,7 +317,8 @@ const JoinUs = () => {
         <div className="mt-6 text-center">
           <button
             type="submit"
-            className="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800">
+            className="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800"
+          >
             Submit Application
           </button>
         </div>
@@ -322,7 +327,8 @@ const JoinUs = () => {
             Already a member of the club?{" "}
             <span
               className="text-blue-600 cursor-pointer hover:underline"
-              onClick={() => navigate("/login")}>
+              onClick={() => navigate("/login")}
+            >
               Login
             </span>
           </p>

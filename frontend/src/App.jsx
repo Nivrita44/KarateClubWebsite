@@ -4,18 +4,16 @@ import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Gallery from "./pages/Gallery";
 import Home from "./pages/Home";
 import InstructorProfile from "./pages/InstructorProfile";
 import Instructors from "./pages/Instructors";
-import Login from "./pages/Login";
-import Profile from "./pages/Profile";
-import Gallery from "./pages/Gallery";
 import JoinUsPage from "./pages/JoinUs";
-import PendingPage from "./pages/PendingPage";
+import Login from "./pages/Login";
 import PaymentPage from "./pages/PaymentPage";
+import PendingPage from "./pages/PendingPage";
+import Profile from "./pages/Profile";
 import UpcomingEvents from "./pages/UpcomingEvents";
-
-
 
 const App = () => {
   return (
@@ -29,9 +27,9 @@ const App = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/join-us" element={<JoinUsPage />} />
         <Route path="/pending" element={<PendingPage />} />
-        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/payment/:id" element={<PaymentPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/events/upcoming" element={<UpcomingEvents />} />;
+        <Route path="/events/upcoming" element={<UpcomingEvents />} />
         <Route path="/my-profile" element={<Profile />} />
         <Route
           path="/instructor-profile/:docId"
