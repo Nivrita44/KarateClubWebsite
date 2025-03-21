@@ -14,6 +14,7 @@ import PaymentPage from "./pages/PaymentPage";
 import PendingPage from "./pages/PendingPage";
 import Profile from "./pages/Profile";
 import UpcomingEvents from "./pages/UpcomingEvents";
+import SuccessPage from "./pages/SuccessPage";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/events/upcoming" element={<UpcomingEvents />} />
         <Route path="/my-profile" element={<Profile />} />
+        <Route path="/success/:tran_id" element={<SuccessPage />} />
         <Route
           path="/instructor-profile/:docId"
           element={<InstructorProfile />}

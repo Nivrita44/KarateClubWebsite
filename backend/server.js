@@ -4,6 +4,10 @@ import express from 'express';
 import mysql from 'mysql2';
 import SSLCommerzPayment from "sslcommerz-lts";
 import db from './config/mysql.js';
+import { cloudinaryConfig, cloudinary } from "./config/cloudinaryConfig.js"; // Cloudinary configuration
+import { multerUploads } from "./middlewares/multer.js"; // Multer middleware for image upload
+
+cloudinaryConfig();
 
 
 
@@ -169,11 +173,112 @@ app.get('/get-member/:id', (req, res) => {
 
 
 
+app.post("/api/join", multerUploads, (req, res) => {
+  console.log("Function called");
+  console.log(req.body);
+  const {
+    name,
+    guardian,
+    relation,
+    dateOfBirth,
+    studentID,
+    campus,
+    department,
+    gender,
+    bloodGroup,
+    height,
+    weight,
+    currentAddress,
+    permanentAddress,
+    phone,
+    password,
+    email,
+    nationalID,
+    religion,
+    previousExperience,
+  } = req.body;
 
-app.post('/api/join', (req, res) => {
-    console.log("📥 Received Data:", req.body); // Debugging log
+  // Cloudinary upload logic
+  const imageFile = req.file;
+  console.log(imageFile);
 
-    const {
+  if (imageFile) {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { resource_type: "auto" },
+      async (error, result) => {
+        if (error) {
+          console.log("Error uploading image to Cloudinary:", error);
+          return res
+            .status(500)
+            .json({ message: "Cloudinary Upload Error", error });
+        }
+        console.log("Cloudinary upload result:", result);
+
+        const imageUrl = result.secure_url;
+        console.log("Image URL:", imageUrl);
+
+        // Now insert the data into MySQL, including the image URL
+        const sql = `
+          INSERT INTO students 
+          (name, guardian, relation, dateOfBirth, studentID, campus, department, gender, bloodGroup, height, weight,
+          currentAddress, permanentAddress, phone, password, email, nationalID, religion, previousExperience, imageUrl) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
+        `;
+
+        db.query(
+          sql,
+          [
+            name,
+            guardian,
+            relation,
+            dateOfBirth,
+            studentID,
+            campus,
+            department,
+            gender,
+            bloodGroup,
+            height,
+            weight,
+            currentAddress,
+            permanentAddress,
+            phone,
+            password,
+            email,
+            nationalID,
+            religion,
+            previousExperience,
+            imageUrl,
+          ],
+          (err, result) => {
+            if (err) {
+              console.error("❌ Database Insert Error:", err);
+              return res
+                .status(500)
+                .json({ message: "Database Error", error: err });
+            }
+            res.status(201).json({
+              message: "Student added successfully!",
+              studentID: result.insertId,
+            });
+          }
+        );
+      }
+    );
+
+    // End the stream and send the file buffer to Cloudinary
+    uploadStream.end(imageFile.buffer);
+  } else {
+    // No image uploaded, proceed without image URL
+    const sql = `
+      INSERT INTO students 
+      (name, guardian, relation, dateOfBirth, studentID, campus, department, gender, bloodGroup, height, weight,
+      currentAddress, permanentAddress, phone, password, email, nationalID, religion, previousExperience) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    db.query(
+      sql,
+      [
         name,
         guardian,
         relation,
@@ -192,36 +297,26 @@ app.post('/api/join', (req, res) => {
         email,
         nationalID,
         religion,
-        previousExperience
-    } = req.body;
-
-    // Ensure all required fields exist
-    if (!name || !guardian || !relation || !dateOfBirth || !studentID || !campus || !department || !gender || !bloodGroup ||
-        !height || !weight || !currentAddress || !permanentAddress || !phone || !password || !email || !nationalID || !religion) {
-        console.log("❌ Missing Fields:", req.body);
-        return res.status(400).json({ message: "All fields are required!" });
-    }
-
-    const sql = `
-        INSERT INTO students 
-        (name, guardian, relation, dateOfBirth, studentID, campus, department, gender, bloodGroup, height, weight, 
-        currentAddress, permanentAddress, phone, password, email, nationalID, religion, previousExperience) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-
-    db.query(sql, [
-        name, guardian, relation, dateOfBirth, studentID, campus, department,
-        gender, bloodGroup, height, weight, currentAddress, permanentAddress,
-        phone, password, email, nationalID, religion, previousExperience
-    ], (err, result) => {
+        previousExperience,
+      ],
+      (err, result) => {
         if (err) {
-            console.error("❌ Database Insert Error:", err);
-            return res.status(500).json({ message: "Database Error", error: err });
+          console.error("❌ Database Insert Error:", err);
+          return res
+            .status(500)
+            .json({ message: "Database Error", error: err });
         }
-        console.log("✅ Student added:", result.insertId);
-        res.status(201).json({ message: "Student added successfully!", id: result.insertId });
-    });
+        res.status(201).json({
+          message: "Student added successfully!",
+            
+          studentID: result.insertId,
+        });
+      }
+    );
+  }
 });
+
+
 
 
 // Root API
@@ -233,3 +328,4 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`✅ Server running on port ${port}`);
 });
+

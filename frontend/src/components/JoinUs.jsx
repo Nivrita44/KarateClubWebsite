@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -29,31 +30,44 @@ const JoinUs = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const [image, setImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("📤 Sending Data:", formData);
+
+    const formDataToSend = new FormData();
+    for (const key in formData) {
+      formDataToSend.append(key, formData[key]);
+    }
+    if (image) {
+      formDataToSend.append("image", image);
+    }
 
     try {
       const response = await fetch("http://localhost:4000/api/join", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        body: formDataToSend,
       });
 
       const data = await response.json();
-      console.log("📥 Server Response:", data);
 
       if (response.ok) {
-        alert("✅ Form submitted successfully!");
-        navigate(`/payment/${data.id}`);
+        alert("Student added successfully!");
+
+        // ✅ Store studentID temporarily
+        sessionStorage.setItem("studentID", data.studentID);
+        
+        navigate("/pending");
       } else {
-        alert(`❌ Submission failed: ${data.message}`);
+        alert("Error adding student");
       }
     } catch (error) {
-      console.error("❌ Error submitting form:", error);
-      alert("❌ Failed to submit form. Please try again.");
+      console.error("Error:", error);
+      alert("Error sending request");
     }
   };
 
@@ -64,8 +78,7 @@ const JoinUs = () => {
       </h2>
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto"
-      >
+        className="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
         {/* Name & Guardian Details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -138,8 +151,7 @@ const JoinUs = () => {
               value={formData.campus}
               onChange={handleChange}
               className="w-full border p-2 rounded"
-              required
-            >
+              required>
               <option value="">Select</option>
               <option value="SUST">SUST</option>
               <option value="SUST-School">SUST-School</option>
@@ -168,8 +180,7 @@ const JoinUs = () => {
               value={formData.gender}
               onChange={handleChange}
               className="w-full border p-2 rounded"
-              required
-            >
+              required>
               <option value="">Select</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -301,6 +312,17 @@ const JoinUs = () => {
               required
             />
           </div>
+          <div className="mt-4">
+            <label className="block font-medium">Profile Picture</label>
+            <input
+              type="file"
+              name="image"
+              onChange={handleImageChange}
+              className="w-full border p-2 rounded"
+              required
+            />
+          </div>
+
           <div>
             <label className="block font-medium">Previous Experience</label>
             <textarea
@@ -308,8 +330,7 @@ const JoinUs = () => {
               value={formData.previousExperience}
               onChange={handleChange}
               className="w-full border p-2 rounded"
-              rows="2"
-            ></textarea>
+              rows="2"></textarea>
           </div>
         </div>
 
@@ -317,8 +338,7 @@ const JoinUs = () => {
         <div className="mt-6 text-center">
           <button
             type="submit"
-            className="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800"
-          >
+            className="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800">
             Submit Application
           </button>
         </div>
@@ -327,8 +347,7 @@ const JoinUs = () => {
             Already a member of the club?{" "}
             <span
               className="text-blue-600 cursor-pointer hover:underline"
-              onClick={() => navigate("/login")}
-            >
+              onClick={() => navigate("/login")}>
               Login
             </span>
           </p>
