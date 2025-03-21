@@ -316,6 +316,41 @@ app.post("/api/join", multerUploads, (req, res) => {
   }
 });
 
+// Get all instructors
+app.get("/api/instructors", (req, res) => {
+  const sql = "SELECT * FROM instructors";
+  
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error("❌ Database error:", err);
+      return res.status(500).json({ message: "Database Error", error: err });
+    }
+
+    res.status(200).json(result); // Send all instructors data as response
+  });
+});
+
+
+// Fetch instructor data
+app.get("/api/instructor/:id", (req, res) => {
+  const { id } = req.params; // Get instructor ID from URL
+
+  const sql = "SELECT * FROM instructors WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error("❌ Database error:", err);
+      return res.status(500).json({ message: "Database Error", error: err });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Instructor not found" });
+    }
+
+    // Send the instructor data as response
+    res.status(200).json(result[0]);
+  });
+});
+
 
 
 
