@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-// import { AppContext } from "../context/AppContext";
+import axios from "axios"; // Make sure axios is installed
 
 const Instructors = () => {
-  const [instructors, setInstructors] = useState([]);
+  const [instructors, setInstructors] = useState([]); // State to store instructors
   const [loading, setLoading] = useState(true); // To handle loading state
   const [error, setError] = useState(null); // To handle errors
+
+  const navigate = useNavigate();
 
   // Fetch instructor data when the component mounts
   useEffect(() => {
@@ -38,16 +39,14 @@ const Instructors = () => {
     <div className="flex flex-col items-center gap-4 my-16 text-gray-900 md:mx-10">
       <h1 className="text-3xl font-medium">All Instructors</h1>
       <p className="sm:w-1/3 text-center text-sm">
-        Simple browse through our extensive list of skilled instructors.
+        Browse through our list of skilled instructors.
       </p>
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-5">
         {instructors.map((instructor) => (
           <div
             key={instructor.id} // Unique key for each instructor
             className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:scale-105 transition-all duration-500"
-            onClick={() =>
-              (window.location.href = `/instructor-profile/${instructor.id}`)
-            } // Navigate to instructor profile page
+            onClick={() => navigate(`/instructor-profile/${instructor.id}`)} // Navigate to instructor profile page
           >
             <img
               className="bg-blue-50"
@@ -67,26 +66,18 @@ const Instructors = () => {
           </div>
         ))}
       </div>
-      {/* <button
-  onClick={() => {
-    navigate("/instructors");
-    scrollTo(0, 0);
-  }}
-  className="bg-blue-50 text-gray-600 px-12 py-3 rounded-full mt-10">
-  more
-</button>; */}
     </div>
   );
 };
 
 export default Instructors;
-
-
-{/* <button
+{
+  /* <button
   onClick={() => {
     navigate("/instructors");
     scrollTo(0, 0);
   }}
   className="bg-blue-50 text-gray-600 px-12 py-3 rounded-full mt-10">
   more
-</button>; */}
+</button>; */
+}

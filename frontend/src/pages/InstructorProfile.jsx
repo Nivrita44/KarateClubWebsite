@@ -3,17 +3,22 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const InstructorProfile = () => {
-  const { docId } = useParams(); // Get the instructor ID from the URL
+  const { ins_id } = useParams(); // Extract ins_id from the URL
   const [instructor, setInstructor] = useState(null); // Store instructor data
   const [loading, setLoading] = useState(true); // Loading state for the profile
   const [error, setError] = useState(null); // Error handling state
 
-  // Fetch instructor data when the component mounts or docId changes
   useEffect(() => {
+    if (!ins_id) {
+      setError("Invalid instructor ID.");
+      setLoading(false);
+      return;
+    }
+
     const fetchInstructorData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/instructor/${docId}`
+          `http://localhost:4000/api/instructor/${ins_id}`
         );
         setInstructor(response.data); // Set the fetched data to state
       } catch (err) {
@@ -23,64 +28,87 @@ const InstructorProfile = () => {
       }
     };
 
-    if (docId) {
-      fetchInstructorData(); // Fetch data if docId is available
-    } else {
-      setError("Invalid instructor ID.");
-      setLoading(false);
-    }
-  }, [docId]);
+    fetchInstructorData();
+  }, [ins_id]); // Only re-run when ins_id changes
 
-  // Show loading state or error message
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="text-center text-lg font-semibold text-gray-600">
+        Loading...
+      </div>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div className="text-center text-lg font-semibold text-red-500">
+        {error}
+      </div>
+    );
   }
 
   if (!instructor) {
-    return <div>Instructor not found.</div>;
+    return (
+      <div className="text-center text-lg font-semibold text-gray-600">
+        Instructor not found.
+      </div>
+    );
   }
 
   return (
-    <section className="container mx-auto px-6 py-12">
+    <section className="container mx-auto px-6 py-12 bg-white rounded-lg shadow-md">
       {/* Instructor Info */}
       <div className="text-center mb-8">
         <img
           src={instructor.profilePic}
           alt="Instructor"
-          className="w-24 h-24 rounded-full mx-auto mb-4"
+          className="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-indigo-500 shadow-lg"
         />
-        <h2 className="text-3xl font-bold">{instructor.name}</h2>
-        <p className="text-lg text-gray-600">{instructor.position}</p>
-        <p className="text-gray-500 mt-4">{instructor.studyBackground}</p>
-        <p className="text-gray-500 mt-4">
-          Serving Period: {instructor.servingPeriod}
+        <h2 className="text-4xl font-bold text-indigo-700">
+          {instructor.name}
+        </h2>
+        <p className="text-xl text-gray-600">{instructor.position}</p>
+        <p className="text-gray-500 mt-4 text-lg leading-relaxed max-w-3xl mx-auto">
+          {instructor.about || "No description available."}
         </p>
       </div>
 
-      {/* Contact and Achievements */}
+      {/* Contact Info */}
       <div className="text-center mt-6">
-        <h3 className="text-xl font-semibold">Contact Info</h3>
+        <h3 className="text-xl font-semibold text-indigo-600">Contact Info</h3>
         <p className="text-lg text-gray-600">Email: {instructor.email}</p>
         <p className="text-lg text-gray-600">Phone: {instructor.phone}</p>
+        <p className="text-lg text-gray-600">
+          {instructor.address_line1 && instructor.address_line2 ? (
+            <>
+              Address: {instructor.address_line1}, {instructor.address_line2}
+            </>
+          ) : (
+            "Address not provided."
+          )}
+        </p>
       </div>
 
+      {/* Additional Info */}
       <div className="text-center mt-6">
-        <h3 className="text-xl font-semibold">Achievements</h3>
-        <ul className="list-disc text-lg text-gray-600 mt-2">
-          {instructor.achievements.map((achievement, index) => (
-            <li key={index}>{achievement}</li>
-          ))}
-        </ul>
+        <h3 className="text-xl font-semibold text-indigo-600">
+          Additional Information
+        </h3>
+        <p className="text-lg text-gray-600">
+          Experience: {instructor.experience || "No experience data available."}
+        </p>
+        <p className="text-lg text-gray-600">
+          Fees: ${instructor.fees || "Not available"}
+        </p>
       </div>
     </section>
   );
 };
 
 export default InstructorProfile;
+
+
+//comment out kore rakhsi pore testing e lagte pare
 
 // import React, { useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";

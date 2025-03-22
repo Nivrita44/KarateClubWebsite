@@ -331,12 +331,11 @@ app.get("/api/instructors", (req, res) => {
 });
 
 
-// Fetch instructor data
-app.get("/api/instructor/:id", (req, res) => {
-  const { id } = req.params; // Get instructor ID from URL
-
+/// Fetch instructor data by ID
+app.get("/api/instructor/:ins_id", (req, res) => {
+  const { ins_id } = req.params; // Get instructor ID from URL
   const sql = "SELECT * FROM instructors WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
+  db.query(sql, [ins_id], (err, result) => {
     if (err) {
       console.error("❌ Database error:", err);
       return res.status(500).json({ message: "Database Error", error: err });
@@ -350,6 +349,21 @@ app.get("/api/instructor/:id", (req, res) => {
     res.status(200).json(result[0]);
   });
 });
+
+// Fetch all instructors from the database
+app.get("/api/instructors", (req, res) => {
+  const sql = "SELECT * FROM instructors"; // Query to fetch all instructors
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error("❌ Database error:", err);
+      return res.status(500).json({ message: "Database Error", error: err });
+    }
+
+    res.status(200).json(result); // Return the instructors data to the frontend
+  });
+});
+
 
 
 

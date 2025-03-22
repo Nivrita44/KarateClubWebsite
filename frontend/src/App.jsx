@@ -32,7 +32,10 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/events/upcoming" element={<UpcomingEvents />} />
         <Route path="/my-profile" element={<Profile />} />
-        <Route path="/instructor-profile/:docId" element={<InstructorProfile />}/>
+        <Route
+          path="/instructor-profile/:ins_id"
+          element={<InstructorProfile />}
+        />
         <Route path="/success/:tran_id" element={<SuccessPage />} />
       </Routes>
       <Footer />

@@ -10,7 +10,7 @@ const Banner = () => {
       <div className="flex-1 py-8 sm:py-10 md:py-16 lg:py-24 lg:pl-5">
         <div className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-semibold text-white">
           <p>Learn Karate</p>
-          <p className="mt-4">Learn self defence for survive</p>
+          <p className="mt-4">Learn self defense for survive</p>
         </div>
         <button
           onClick={() => {
