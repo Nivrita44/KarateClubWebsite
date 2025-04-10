@@ -27,10 +27,11 @@ const sslcommerzDb = mysql
     .createPool({
         host: "localhost",
         user: "root",
-        password: "",
-        database: "sust_karate_club",
+        password: "Ema234",
+        database: "demo_import",
     })
-    .promise();
+  .promise(); //why mysql2 te promise  evabe use kore na.. er age amra db r code likhsi mysql er ager version er. to promise chara choltese na kno?.. bujhtesina code e kisu overlap ache.. funtionality check kore dekho ekhon . partam na. zemne ase emnei cholle cholbo, nailw nai etai boltesi choltese choluk baki kam kaj hoitese kina.  oita dekhte boltesi ar ki 
+// ekhane amk db ta dekha, cnnection ta
 
 // Ensure bills table exists
 const createBillsTable = `
@@ -146,208 +147,176 @@ app.get("/api/transaction/:tran_id", async(req, res) => {
 
 
 // API to handle checkout operation (fetching user data using id)
-app.get('/get-member/:id', (req, res) => {
+// app.get('/get-member/:id', async (req, res) => {
+//     const { id } = req.params;
+//     console.log(`🔍 Received request for user ID: ${id}`);
+
+//     // Using CAST to ensure the ID is treated as an integer
+//     const sql = "SELECT * FROM students WHERE id = ?";
+//     const [result]= await db.query(sql, [id], (err, result) => {
+//         if (err) {
+//             console.error("❌ Database error:", err);
+//             return res.status(500).json({ message: "Database Error", error: err });
+//         }
+
+//         console.log(`🔍 Query result:`, result);
+
+//         if (result.length === 0) {
+//             console.log("❌ No user found with that ID.");
+//             return res.status(404).json({ message: "Student not found" });
+//         }
+
+//         console.log("✅ Successfully fetched user data:", result[0]);
+//         res.status(200).json(result[0]);
+//     });
+// });
+
+app.get("/get-member/:id", async (req, res) => {
+  try {
     const { id } = req.params;
     console.log(`🔍 Received request for user ID: ${id}`);
 
-    // Using CAST to ensure the ID is treated as an integer
     const sql = "SELECT * FROM students WHERE id = ?";
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            console.error("❌ Database error:", err);
-            return res.status(500).json({ message: "Database Error", error: err });
-        }
+    const result = await db.query(sql, [id]);
 
-        console.log(`🔍 Query result:`, result);
+    console.log(`🔍 Query result:`, result);
 
-        if (result.length === 0) {
-            console.log("❌ No user found with that ID.");
-            return res.status(404).json({ message: "Student not found" });
-        }
+    if (result.length === 0) {
+      console.log("❌ No user found with that ID.");
+      return res.status(404).json({ message: "Student not found" });
+    }
 
-        console.log("✅ Successfully fetched user data:", result[0]);
-        res.status(200).json(result[0]);
-    });
+    console.log("✅ Successfully fetched user data:", result[0]);
+    res.status(200).json(result[0]);
+  } catch (err) {
+    console.error("❌ Database error:", err);
+    res.status(500).json({ message: "Database Error", error: err });
+  }
 });
 
 
 
+// Get Instructor data by ID
 
-app.post("/api/join", multerUploads, (req, res) => {
-  console.log("Function called");
-  console.log(req.body);
-  const {
-    name,
-    guardian,
-    relation,
-    dateOfBirth,
-    studentID,
-    campus,
-    department,
-    gender,
-    bloodGroup,
-    height,
-    weight,
-    currentAddress,
-    permanentAddress,
-    phone,
-    password,
-    email,
-    nationalID,
-    religion,
-    previousExperience,
-  } = req.body;
+app.get("/api/instructors", async (req, res) => {
+  try {
+    const sql = "SELECT * FROM instructors";
+    const [result] = await db.query(sql);
+    res.status(200).json(result);
+    // console.log(result);
+  } catch (err) {
+    console.error("❌ Database error:", err);
+    res.status(500).json({ message: "Database Error", error: err });
+  }
+});
 
-  // Cloudinary upload logic
-  const imageFile = req.file;
-  console.log(imageFile);
+// Join Club 
+app.post("/api/join", multerUploads, async (req, res) => {
+  try {
+    console.log("Function called");
+    console.log(req.body);
+    const {
+      name,
+      guardian,
+      relation,
+      dateOfBirth,
+      studentID,
+      campus,
+      department,
+      gender,
+      bloodGroup,
+      height,
+      weight,
+      currentAddress,
+      permanentAddress,
+      phone,
+      password,
+      email,
+      nationalID,
+      religion,
+      previousExperience,
+    } = req.body;
 
-  if (imageFile) {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      { resource_type: "auto" },
-      async (error, result) => {
-        if (error) {
-          console.log("Error uploading image to Cloudinary:", error);
-          return res
-            .status(500)
-            .json({ message: "Cloudinary Upload Error", error });
-        }
-        console.log("Cloudinary upload result:", result);
+    // Cloudinary upload logic
+    const imageFile = req.file;
+    console.log(imageFile);
 
-        const imageUrl = result.secure_url;
-        console.log("Image URL:", imageUrl);
-
-        // Now insert the data into MySQL, including the image URL
-        const sql = `
-          INSERT INTO students 
-          (name, guardian, relation, dateOfBirth, studentID, campus, department, gender, bloodGroup, height, weight,
-          currentAddress, permanentAddress, phone, password, email, nationalID, religion, previousExperience, imageUrl) 
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
-        `;
-
-        db.query(
-          sql,
-          [
-            name,
-            guardian,
-            relation,
-            dateOfBirth,
-            studentID,
-            campus,
-            department,
-            gender,
-            bloodGroup,
-            height,
-            weight,
-            currentAddress,
-            permanentAddress,
-            phone,
-            password,
-            email,
-            nationalID,
-            religion,
-            previousExperience,
-            imageUrl,
-          ],
-          (err, result) => {
-            if (err) {
-              console.error("❌ Database Insert Error:", err);
-              return res
-                .status(500)
-                .json({ message: "Database Error", error: err });
-            }
-            res.status(201).json({
-              message: "Student added successfully!",
-              studentID: result.insertId,
-            });
+    let imageUrl = null;
+    
+    if (imageFile) {
+      // Upload image to Cloudinary
+      const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { resource_type: "auto" },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
           }
         );
-      }
-    );
+        uploadStream.end(imageFile.buffer);
+      });
+      
+      console.log("Cloudinary upload result:", result);
+      imageUrl = result.secure_url;
+      console.log("Image URL:", imageUrl);
+    }
 
-    // End the stream and send the file buffer to Cloudinary
-    uploadStream.end(imageFile.buffer);
-  } else {
-    // No image uploaded, proceed without image URL
-    const sql = `
+    // Insert data into MySQL
+    const sql = imageUrl ? `
+      INSERT INTO students 
+      (name, guardian, relation, dateOfBirth, studentID, campus, department, gender, bloodGroup, height, weight,
+      currentAddress, permanentAddress, phone, password, email, nationalID, religion, previousExperience, imageUrl) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ` : `
       INSERT INTO students 
       (name, guardian, relation, dateOfBirth, studentID, campus, department, gender, bloodGroup, height, weight,
       currentAddress, permanentAddress, phone, password, email, nationalID, religion, previousExperience) 
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    db.query(
-      sql,
-      [
-        name,
-        guardian,
-        relation,
-        dateOfBirth,
-        studentID,
-        campus,
-        department,
-        gender,
-        bloodGroup,
-        height,
-        weight,
-        currentAddress,
-        permanentAddress,
-        phone,
-        password,
-        email,
-        nationalID,
-        religion,
-        previousExperience,
-      ],
-      (err, result) => {
-        if (err) {
-          console.error("❌ Database Insert Error:", err);
-          return res
-            .status(500)
-            .json({ message: "Database Error", error: err });
-        }
-        res.status(201).json({
-          message: "Student added successfully!",
-            
-          studentID: result.insertId,
-        });
-      }
-    );
+    const values = imageUrl ? [
+      name, guardian, relation, dateOfBirth, studentID, campus, department, gender, bloodGroup, height, weight,
+      currentAddress, permanentAddress, phone, password, email, nationalID, religion, previousExperience, imageUrl
+    ] : [
+      name, guardian, relation, dateOfBirth, studentID, campus, department, gender, bloodGroup, height, weight,
+      currentAddress, permanentAddress, phone, password, email, nationalID, religion, previousExperience
+    ];
+
+    const [result] = await db.query(sql, values);
+    
+    res.status(201).json({
+      message: "Student added successfully!",
+      studentID: result.insertId,
+    });
+
+  } catch (err) {
+    console.error("❌ Error:", err);
+    res.status(500).json({ 
+      message: err.message.includes("Cloudinary") 
+        ? "Cloudinary Upload Error" 
+        : "Database Error", 
+      error: err 
+    });
   }
-});
-
-// Get all instructors
-app.get("/api/instructors", (req, res) => {
-  const sql = "SELECT * FROM instructors";
-  
-  db.query(sql, (err, result) => {
-    if (err) {
-      console.error("❌ Database error:", err);
-      return res.status(500).json({ message: "Database Error", error: err });
-    }
-
-    res.status(200).json(result); // Send all instructors data as response
-  });
 });
 
 
 /// Fetch instructor data by ID
-app.get("/api/instructor/:ins_id", (req, res) => {
-  const { ins_id } = req.params; // Get instructor ID from URL
-  const sql = "SELECT * FROM instructors WHERE id = ?";
-  db.query(sql, [ins_id], (err, result) => {
-    if (err) {
-      console.error("❌ Database error:", err);
-      return res.status(500).json({ message: "Database Error", error: err });
-    }
+app.get("/api/instructor/:ins_id", async (req, res) => {
+  try {
+    const { ins_id } = req.params;
+    const sql = "SELECT * FROM instructors WHERE id = ?";
+    const result = await db.query(sql, [ins_id]);
 
     if (result.length === 0) {
       return res.status(404).json({ message: "Instructor not found" });
     }
 
-    // Send the instructor data as response
     res.status(200).json(result[0]);
-  });
+  } catch (err) {
+    console.error("❌ Database error:", err);
+    res.status(500).json({ message: "Database Error", error: err });
+  }
 });
 
 // Fetch all instructors from the database

@@ -20,7 +20,7 @@ const InstructorProfile = () => {
         const response = await axios.get(
           `http://localhost:4000/api/instructor/${ins_id}`
         );
-        setInstructor(response.data); // Set the fetched data to state
+        setInstructor(response.data[0]); // Set the fetched data to state
       } catch (err) {
         setError("Failed to fetch instructor data.");
       } finally {
