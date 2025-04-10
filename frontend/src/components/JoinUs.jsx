@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -17,7 +18,7 @@ const JoinUs = () => {
     weight: "",
     currentAddress: "",
     permanentAddress: "",
-      phone: "",
+    phone: "",
     password: "",
     email: "",
     nationalID: "",
@@ -29,10 +30,45 @@ const JoinUs = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const [image, setImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    localStorage.setItem("admissionData", JSON.stringify(formData));
-    navigate("/pending");
+
+    const formDataToSend = new FormData();
+    for (const key in formData) {
+      formDataToSend.append(key, formData[key]);
+    }
+    if (image) {
+      formDataToSend.append("image", image);
+    }
+
+    try {
+      const response = await fetch("http://localhost:4000/api/join", {
+        method: "POST",
+        body: formDataToSend,
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Student added successfully!");
+
+        // ✅ Store studentID temporarily
+        sessionStorage.setItem("studentID", data.studentID);
+        
+        navigate("/pending");
+      } else {
+        alert("Error adding student");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error sending request");
+    }
   };
 
   return (
@@ -276,6 +312,17 @@ const JoinUs = () => {
               required
             />
           </div>
+          <div className="mt-4">
+            <label className="block font-medium">Profile Picture</label>
+            <input
+              type="file"
+              name="image"
+              onChange={handleImageChange}
+              className="w-full border p-2 rounded"
+              required
+            />
+          </div>
+
           <div>
             <label className="block font-medium">Previous Experience</label>
             <textarea
