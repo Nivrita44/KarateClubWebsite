@@ -7,28 +7,43 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
 
-    if (formData.email && formData.password) {
-      alert("Login Successful!");
+    try {
+      const response = await fetch("http://localhost:4000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-      localStorage.setItem("token", "user-authenticated");
+      const data = await response.json();
 
-      navigate("/"); 
-      window.location.reload(); 
-    } else {
-      alert("Please enter valid email and password.");
+      if (response.ok) {
+        alert("Login Successful!");
+        // Store the user data in localStorage (excluding password)
+        localStorage.setItem("userId", data.user.id);
+        localStorage.setItem("token", JSON.stringify(data.user));
+        navigate("/");
+        window.location.reload();
+      } else {
+        setError(data.message || "Invalid email or password.");
+      }
+    } catch (error) {
+      setError("Server error. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
-
-    
-
 
   return (
     <section className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -36,6 +51,8 @@ const Login = () => {
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
           Welcome Back to SKC!
         </h2>
+
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email Field */}
@@ -68,8 +85,10 @@ const Login = () => {
           <div className="text-center">
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all shadow-md">
-              Login
+              className="w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all shadow-md"
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "Login"}
             </button>
           </div>
         </form>
@@ -80,7 +99,8 @@ const Login = () => {
             Not a member?{" "}
             <span
               className="text-blue-600 cursor-pointer hover:underline"
-              onClick={() => navigate("/join-us")}>
+              onClick={() => navigate("/join-us")}
+            >
               Join Now
             </span>
           </p>

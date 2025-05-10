@@ -1,22 +1,25 @@
-import React, { useState, useRef , useEffect} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("token") ? true : false;
-  });
-
+  const [user, setUser] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const timeoutRef = useRef(null);
 
- useEffect(() => {
-   const storedToken = localStorage.getItem("token");
-   setToken(storedToken ? true : false);
- }, []);
-
+  useEffect(() => {
+    const storedUser = localStorage.getItem("token");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser)); // Get user from localStorage
+      } catch (e) {
+        console.error("Failed to parse user token:", e);
+        setUser(null);
+      }
+    }
+  }, []);
 
   const openDropdown = () => {
     setIsDropdownOpen(true);
@@ -31,8 +34,9 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setToken(false);
+    setUser(null);
     navigate("/");
+    window.location.reload();
   };
 
   return (
@@ -48,56 +52,55 @@ const Navbar = () => {
         <NavLink to="/">
           <li className="py-1">HOME</li>
         </NavLink>
-
         <NavLink to="/instructors">
           <li className="py-1">ALL INSTRUCTORS</li>
         </NavLink>
-
         <NavLink to="/about">
           <li className="py-1">ABOUT CLUB</li>
         </NavLink>
-
-        {/* Dropdown for EVENTS */}
         <div
           className="relative"
           onMouseEnter={openDropdown}
-          onMouseLeave={delayedCloseDropdown}>
+          onMouseLeave={delayedCloseDropdown}
+        >
           <button className="py-1" onClick={openDropdown}>
             EVENTS
           </button>
-
           {isDropdownOpen && (
             <div
               className="absolute left-0 mt-2 w-40 bg-white shadow-md rounded-lg border"
               onMouseEnter={openDropdown}
-              onMouseLeave={delayedCloseDropdown}>
+              onMouseLeave={delayedCloseDropdown}
+            >
               <NavLink
                 to="/events/previous"
-                className="block px-4 py-2 hover:bg-gray-100">
+                className="block px-4 py-2 hover:bg-gray-100"
+              >
                 Previous Events
               </NavLink>
               <NavLink
                 to="/events/upcoming"
-                className="block px-4 py-2 hover:bg-gray-100">
+                className="block px-4 py-2 hover:bg-gray-100"
+              >
                 Upcoming Events
               </NavLink>
             </div>
           )}
         </div>
-
         <NavLink to="/gallery">
           <li className="py-1">GALLERY</li>
         </NavLink>
       </ul>
 
       <div className="flex items-center gap-4">
-        {token ? (
+        {user ? (
           <div className="flex items-center gap-2 cursor-pointer group relative">
             <img
               className="w-8 rounded-full"
-              src={assets.profile_pic}
+              src={user.imageUrl || assets.profile_pic} // Use the profilePicUrl if available
               alt="Profile"
             />
+            <span className="font-medium text-gray-700">{user.name}</span>
             <img
               className="w-2.5"
               src={assets.dropdown_icon}
@@ -107,13 +110,15 @@ const Navbar = () => {
               <div className="min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4">
                 <p
                   onClick={() => navigate("/my-profile")}
-                  className="hover:text-black cursor-pointer">
+                  className="hover:text-black cursor-pointer"
+                >
                   My Profile
                 </p>
                 <p className="hover:text-black cursor-pointer">My Classes</p>
                 <p
                   onClick={handleLogout}
-                  className="hover:text-black cursor-pointer">
+                  className="hover:text-black cursor-pointer"
+                >
                   Logout
                 </p>
               </div>
@@ -122,21 +127,24 @@ const Navbar = () => {
         ) : (
           <button
             onClick={() => navigate("/join-us")}
-            className="bg-primary text-white px-8 py-3 rounded-full font-light hidden md:block">
+            className="bg-primary text-white px-8 py-3 rounded-full font-light hidden md:block"
+          >
             Join Us
           </button>
         )}
         <img
           onClick={() => setShowMenu(true)}
           src={assets.menu_icon}
-          alt=""
+          alt="Menu"
           className="w-6 md:hidden"
         />
-        {/** Mobile Menu */}
+
+        {/* Mobile Menu */}
         <div
           className={`${
             showMenu ? "fixed w-full" : "h-0 w-0"
-          } md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}>
+          } md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}
+        >
           <div className="flex justify-between items-center px-5 py-6">
             <img className="w-36" src={assets.logo} alt="" />
             <img
@@ -147,9 +155,7 @@ const Navbar = () => {
             />
           </div>
           <ul className="flex flex-col items-center gap-3 mt-5 px-5 text-lg font-medium">
-            <NavLink
-              onClick={() => setShowMenu(false)}
-              to="/">
+            <NavLink onClick={() => setShowMenu(false)} to="/">
               <p className="px-4 py-2 rounded inline-block">Home</p>
             </NavLink>
             <NavLink onClick={() => setShowMenu(false)} to="/instructors">
