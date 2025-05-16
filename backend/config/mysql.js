@@ -1,12 +1,21 @@
-import mysql from 'mysql';
+import mysql from "mysql2";
 
-const db = mysql.createConnection({
-    host: 'localhost', // Example: '192.168.1.100' or domain
-    user: 'root',
-    password: '',
-    database: 'sust_karate_club'
-});
+// Initialize the database connection
+const db = await mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "", // Make sure this is correct
+        database: "karateclubsust",
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0,
+    })
+    .promise();
 
+
+console.log("Connected to MySQL database.");
+
+// Define the table creation query
 const createNewTableQuery = `
     CREATE TABLE IF NOT EXISTS students (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -34,13 +43,14 @@ const createNewTableQuery = `
     );
 `;
 
-// Execute the query
-db.query(createNewTableQuery, (err, result) => {
-    if (err) {
-        console.error("Error creating table:", err);
-    } else {
-        console.log("Students table created or already exists.");
-    }
-});
+// Execute the query correctly without callback
+try {
+    const [results] = await db.query(createNewTableQuery);
+    console.log("Students table created or already exists.");
+    console.log("Results:", results);
+} catch (error) {
+    console.error("Error creating table:", error);
+}
 
+// Export the database connection
 export default db;

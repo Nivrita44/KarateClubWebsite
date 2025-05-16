@@ -21,7 +21,10 @@ const PaymentPage = () => {
         const response = await axios.get(
           `http://localhost:4000/get-member/${id}`
         );
-        setStudent(response.data); // Set student data from the response
+    
+        console.log("📥 Student data fetched:", response.data); // Debugging log
+        setStudent(response.data[0]); // Set student data from the response
+        console.log("Student data:", student); // Debugging log
       } catch (error) {
         console.error("❌ Error fetching student data:", error);
         setError("Failed to fetch student data. Please try again later.");
