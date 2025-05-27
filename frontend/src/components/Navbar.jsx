@@ -5,7 +5,12 @@ import { assets } from "../assets/assets";
 const Navbar = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("token");
+    const parsed = storedUser ? JSON.parse(storedUser) : null;
+    if (parsed) parsed.role = localStorage.getItem("role");
+    return parsed;
+  });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const timeoutRef = useRef(null);
 
@@ -61,8 +66,7 @@ const Navbar = () => {
         <div
           className="relative"
           onMouseEnter={openDropdown}
-          onMouseLeave={delayedCloseDropdown}
-        >
+          onMouseLeave={delayedCloseDropdown}>
           <button className="py-1" onClick={openDropdown}>
             EVENTS
           </button>
@@ -70,18 +74,15 @@ const Navbar = () => {
             <div
               className="absolute left-0 mt-2 w-40 bg-white shadow-md rounded-lg border"
               onMouseEnter={openDropdown}
-              onMouseLeave={delayedCloseDropdown}
-            >
+              onMouseLeave={delayedCloseDropdown}>
               <NavLink
                 to="/events/previous"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
+                className="block px-4 py-2 hover:bg-gray-100">
                 Previous Events
               </NavLink>
               <NavLink
                 to="/events/upcoming"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
+                className="block px-4 py-2 hover:bg-gray-100">
                 Upcoming Events
               </NavLink>
             </div>
@@ -108,29 +109,50 @@ const Navbar = () => {
             />
             <div className="absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 hidden group-hover:block">
               <div className="min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4">
-                <p
-                  onClick={() => navigate("/my-profile")}
-                  className="hover:text-black cursor-pointer"
-                >
-                  My Profile
-                </p>
-                <p className="hover:text-black cursor-pointer">My Classes</p>
+                {user?.role === "student" && (
+                  <>
+                    <p
+                      onClick={() => navigate("/my-profile")}
+                      className="hover:text-black cursor-pointer">
+                      My Profile
+                    </p>
+                    <p
+                      onClick={() => navigate("/class-routine")}
+                      className="hover:text-black cursor-pointer">
+                      My Classes
+                    </p>
+                  </>
+                )}
+
+                {user?.role === "instructor" && (
+                  <p
+                    onClick={() => navigate("/instructor-dashboard")}
+                    className="hover:text-black cursor-pointer">
+                    Instructor Panel
+                  </p>
+                )}
+
                 <p
                   onClick={handleLogout}
-                  className="hover:text-black cursor-pointer"
-                >
+                  className="hover:text-black cursor-pointer">
                   Logout
                 </p>
               </div>
             </div>
           </div>
         ) : (
-          <button
-            onClick={() => navigate("/join-us")}
-            className="bg-primary text-white px-8 py-3 rounded-full font-light hidden md:block"
-          >
-            Join Us
-          </button>
+          <div className="flex gap-4">
+            <button
+              onClick={() => navigate("/instructor-login")}
+              className="bg-white text-primary border border-primary px-6 py-2 rounded-full font-light hidden md:block">
+              Login as Instructor
+            </button>
+            <button
+              onClick={() => navigate("/join-us")}
+              className="bg-primary text-white px-8 py-3 rounded-full font-light hidden md:block">
+              Join Us
+            </button>
+          </div>
         )}
         <img
           onClick={() => setShowMenu(true)}
@@ -143,8 +165,7 @@ const Navbar = () => {
         <div
           className={`${
             showMenu ? "fixed w-full" : "h-0 w-0"
-          } md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}
-        >
+          } md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}>
           <div className="flex justify-between items-center px-5 py-6">
             <img className="w-36" src={assets.logo} alt="" />
             <img

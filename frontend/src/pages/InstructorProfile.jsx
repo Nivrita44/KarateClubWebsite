@@ -1,112 +1,214 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import axios from "axios";
 
+const beltOptions = [
+  "White Belt",
+  "Yellow Belt",
+  "Orange Belt",
+  "Green Belt",
+  "Blue Belt",
+  "Purple Belt",
+  "Brown Belt",
+  "Black Belt",
+];
+
 const InstructorProfile = () => {
-  const { ins_id } = useParams(); // Extract ins_id from the URL
-  const [instructor, setInstructor] = useState(null); // Store instructor data
-  const [loading, setLoading] = useState(true); // Loading state for the profile
-  const [error, setError] = useState(null); // Error handling state
+  const userId = localStorage.getItem("userId");
+  const role = localStorage.getItem("role");
+  const [instructor, setInstructor] = useState(null);
+  const [isEdit, setIsEdit] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [preview, setPreview] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState("");
 
   useEffect(() => {
-    if (!ins_id) {
-      setError("Invalid instructor ID.");
-      setLoading(false);
-      return;
-    }
-
-    const fetchInstructorData = async () => {
+    const fetchInstructor = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/instructor/${ins_id}`
+          `http://localhost:4000/api/instructor/${userId}`
         );
-        setInstructor(response.data[0]); // Set the fetched data to state
+        setInstructor(response.data[0]);
+        setPreview(response.data[0].profilePic);
       } catch (err) {
-        setError("Failed to fetch instructor data.");
+        console.error("Failed to load instructor profile.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchInstructorData();
-  }, [ins_id]); // Only re-run when ins_id changes
+    if (userId && role === "instructor") fetchInstructor();
+  }, [userId, role]);
 
-  if (loading) {
-    return (
-      <div className="text-center text-lg font-semibold text-gray-600">
-        Loading...
-      </div>
-    );
-  }
+  const handleChange = (e) => {
+    setInstructor({ ...instructor, [e.target.name]: e.target.value });
+  };
 
-  if (error) {
-    return (
-      <div className="text-center text-lg font-semibold text-red-500">
-        {error}
-      </div>
-    );
-  }
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setPreview(URL.createObjectURL(file));
+    const formData = new FormData();
+    formData.append("image", file);
 
-  if (!instructor) {
-    return (
-      <div className="text-center text-lg font-semibold text-gray-600">
-        Instructor not found.
-      </div>
-    );
-  }
+    axios
+      .post("http://localhost:4000/api/upload", formData)
+      .then((res) => {
+        setInstructor({ ...instructor, profilePic: res.data.url });
+      })
+      .catch(() => alert("Image upload failed."));
+  };
+
+  const handleSave = async () => {
+    if (password && password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    try {
+      const payload = { ...instructor };
+      if (password) payload.password = password;
+
+      await axios.put(
+        `http://localhost:4000/api/instructor/${userId}`,
+        payload
+      );
+      setIsEdit(false);
+      setPassword("");
+      setConfirmPassword("");
+      setToast("Profile updated successfully!");
+
+      setTimeout(() => setToast(""), 3000);
+    } catch (err) {
+      alert("Failed to save profile.");
+    }
+  };
+
+  if (loading)
+    return <div className="text-center py-10 text-gray-600">Loading...</div>;
+  if (!instructor)
+    return <div className="text-center text-red-600 py-10">Unauthorized</div>;
 
   return (
-    <section className="container mx-auto px-6 py-12 bg-white rounded-lg shadow-md">
-      {/* Instructor Info */}
-      <div className="text-center mb-8">
+    <section className="max-w-4xl mx-auto mt-12 bg-white shadow-xl rounded-lg p-8">
+      {toast && (
+        <div className="mb-4 text-center bg-green-100 text-green-800 py-2 rounded shadow">
+          {toast}
+        </div>
+      )}
+
+      <div className="flex flex-col items-center gap-4">
         <img
-          src={instructor.profilePic}
-          alt="Instructor"
-          className="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-indigo-500 shadow-lg"
+          src={preview}
+          alt="Profile"
+          className="w-32 h-32 rounded-full border-4 border-red-500 shadow-md"
         />
-        <h2 className="text-4xl font-bold text-indigo-700">
-          {instructor.name}
-        </h2>
-        <p className="text-xl text-gray-600">{instructor.position}</p>
-        <p className="text-gray-500 mt-4 text-lg leading-relaxed max-w-3xl mx-auto">
-          {instructor.about || "No description available."}
-        </p>
+        {isEdit && (
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="text-sm"
+          />
+        )}
+        <h1 className="text-3xl font-bold text-gray-800">{instructor.name}</h1>
+        <p className="text-gray-600">{instructor.position}</p>
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          onClick={() => setIsEdit(!isEdit)}>
+          {isEdit ? "Cancel" : "Edit Profile"}
+        </button>
       </div>
 
-      {/* Contact Info */}
-      <div className="text-center mt-6">
-        <h3 className="text-xl font-semibold text-indigo-600">Contact Info</h3>
-        <p className="text-lg text-gray-600">Email: {instructor.email}</p>
-        <p className="text-lg text-gray-600">Phone: {instructor.phone}</p>
-        <p className="text-lg text-gray-600">
-          {instructor.address_line1 && instructor.address_line2 ? (
-            <>
-              Address: {instructor.address_line1}, {instructor.address_line2}
-            </>
+      <div className="mt-8 space-y-6">
+        {/* Text fields */}
+        {[
+          { label: "Email", name: "email" },
+          { label: "Phone", name: "phone" },
+          { label: "Study Background", name: "studyBackground" },
+          { label: "Achievements", name: "achievements" },
+          { label: "Serving Period", name: "servingPeriod" },
+        ].map(({ label, name }) => (
+          <div key={name}>
+            <label className="block text-sm text-gray-500">{label}</label>
+            {isEdit ? (
+              <input
+                type="text"
+                name={name}
+                value={instructor[name] || ""}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2 mt-1"
+              />
+            ) : (
+              <p className="text-gray-800">{instructor[name] || "—"}</p>
+            )}
+          </div>
+        ))}
+
+        {/* Belt dropdown */}
+        <div>
+          <label className="block text-sm text-gray-500">Belt</label>
+          {isEdit ? (
+            <select
+              name="belt"
+              value={instructor.belt || ""}
+              onChange={handleChange}
+              className="w-full border rounded px-3 py-2 mt-1">
+              <option value="">Select Belt</option>
+              {beltOptions.map((belt) => (
+                <option key={belt} value={belt}>
+                  {belt}
+                </option>
+              ))}
+            </select>
           ) : (
-            "Address not provided."
+            <p className="text-gray-800">{instructor.belt || "—"}</p>
           )}
-        </p>
+        </div>
+
+        {/* Password fields */}
+        {isEdit && (
+          <>
+            <div>
+              <label className="block text-sm text-gray-500">
+                New Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full border rounded px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-gray-500">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full border rounded px-3 py-2"
+              />
+            </div>
+          </>
+        )}
       </div>
 
-      {/* Additional Info */}
-      <div className="text-center mt-6">
-        <h3 className="text-xl font-semibold text-indigo-600">
-          Additional Information
-        </h3>
-        <p className="text-lg text-gray-600">
-          Experience: {instructor.experience || "No experience data available."}
-        </p>
-        <p className="text-lg text-gray-600">
-          Fees: ${instructor.fees || "Not available"}
-        </p>
-      </div>
+      {isEdit && (
+        <div className="mt-6 text-center">
+          <button
+            onClick={handleSave}
+            className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+            Save Changes
+          </button>
+        </div>
+      )}
     </section>
   );
 };
 
 export default InstructorProfile;
-
 
 //comment out kore rakhsi pore testing e lagte pare
 

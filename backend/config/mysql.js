@@ -5,7 +5,7 @@ const db = await mysql.createConnection({
         host: "localhost",
         user: "root",
         password: "", // Make sure this is correct
-        database: "karateclubsust",
+        database: "SUST_Karate_Club",
         waitForConnections: true,
         connectionLimit: 10,
         queueLimit: 0,

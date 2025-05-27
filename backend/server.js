@@ -3,10 +3,14 @@ import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
 import mysql from 'mysql2';
+import multer from "multer";
+
 import SSLCommerzPayment from "sslcommerz-lts";
 import { cloudinary, cloudinaryConfig } from "./config/cloudinaryConfig.js"; // Cloudinary configuration
 import db from './config/mysql.js';
 import { multerUploads } from "./middlewares/multer.js"; // Multer middleware for image upload
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 cloudinaryConfig();
 
@@ -30,7 +34,7 @@ const sslcommerzDb = mysql
         host: "localhost",
         user: "root",
         password: "",
-        database: "karateclubsust",
+        database: "SUST_Karate_Club",
     })
     .promise();
 
@@ -181,6 +185,44 @@ app.get("/api/instructors", async(req, res) => {
         res.status(500).json({ message: "Database Error", error: err });
     }
 });
+// Get all students
+app.get("/api/students", async (req, res) => {
+  const [results] = await db.query("SELECT * FROM students");
+  res.json(results);
+});
+// Get student by ID
+app.put("/api/students/:id", async (req, res) => {
+  const { belt, certificate } = req.body;
+  await db.query("UPDATE students SET belt = ?, certificate = ? WHERE id = ?", [
+    belt,
+    certificate,
+    req.params.id,
+  ]);
+  res.json({ message: "Student updated" });
+});
+//certificate image upload
+app.post(
+  "/api/upload-certificate",
+  upload.single("certificate"),
+  async (req, res) => {
+    try {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: "certificates" },
+        (err, result) => {
+          if (err) return res.status(500).json({ error: "Upload failed" });
+          res.json({ url: result.secure_url });
+        }
+      );
+      stream.end(req.file.buffer);
+    } catch (err) {
+      res.status(500).json({ error: "Server error" });
+    }
+  }
+);
+  
+  
+
+// Add a new student
 
 app.post("/api/join", multerUploads, async(req, res) => {
     try {
@@ -279,47 +321,102 @@ app.post("/api/join", multerUploads, async(req, res) => {
 });
 
 //login
-app.post("/api/login", async(req, res) => {
-    const { email, password } = req.body;
+//students login
+app.post("/api/login", async (req, res) => {
+  const { email, password } = req.body;
 
-    if (!email || !password) {
-        return res.status(400).json({ message: "Email and password required." });
+  if (!email || !password)
+    return res.status(400).json({ message: "Email and password required." });
+
+  try {
+    const [results] = await db.query("SELECT * FROM students WHERE email = ?", [
+      email,
+    ]);
+
+    if (results.length === 0) {
+      return res.status(401).json({ message: "Invalid credentials." });
     }
 
-    try {
-        const [results] = await db.query("SELECT * FROM students WHERE email = ?", [email]);
+    const user = results[0];
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-        if (results.length === 0) {
-            return res.status(401).json({ message: "Invalid credentials." });
-        }
-
-        const user = results[0];
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: "Invalid credentials." });
-        }
-
-        // Don't expose the hashed password
-        delete user.password;
-
-        res.status(200).json({
-            message: "Login successful",
-            user: {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                campus: user.campus,
-                department: user.department,
-                gender: user.gender,
-                imageUrl: user.imageUrl,
-            },
-        });
-    } catch (err) {
-        console.error("❌ Login error:", err);
-        res.status(500).json({ message: "Server error", error: err.message });
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid credentials." });
     }
+
+    delete user.password;
+
+    res.status(200).json({
+      message: "Login successful",
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role || "student", // <-- Send role here
+        imageUrl: user.imageUrl,
+        campus: user.campus,
+        department: user.department,
+        gender: user.gender,
+      },
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
 });
+//instructors login
+app.post("/api/instructor-login", async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password)
+    return res.status(400).json({ message: "Email and password required." });
+
+  try {
+    const [results] = await db.query(
+      "SELECT * FROM instructors WHERE email = ?",
+      [email]
+    );
+
+    if (results.length === 0) {
+      return res.status(401).json({ message: "Invalid credentials." });
+    }
+
+    const instructor = results[0];
+
+    // ✅ DEBUG HERE
+    console.log("Request email:", email);
+    console.log("DB result:", instructor);
+    console.log(
+      "Password match:",
+      await bcrypt.compare(password, instructor.password)
+    );
+
+    const isPasswordValid = await bcrypt.compare(password, instructor.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid credentials." });
+    }
+
+    delete instructor.password;
+
+    res.status(200).json({
+      message: "Login successful",
+      user: {
+        id: instructor.id,
+        name: instructor.name,
+        email: instructor.email,
+        role: instructor.role || "instructor",
+        phone: instructor.phone,
+        imageUrl: instructor.profilePic,
+      },
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});  
+  
+  
 
 /// Fetch instructor data by ID
 app.get("/api/instructor/:ins_id", async(req, res) => {
@@ -333,6 +430,51 @@ app.get("/api/instructor/:ins_id", async(req, res) => {
         res.status(500).json({ message: "Database Error", error: err });
     }
 });
+
+app.put("/api/instructor/:id", async (req, res) => {
+  const { id } = req.params;
+  const updatedFields = req.body;
+
+  try {
+    const ignoreFields = ["createdAt", "updatedAt"];
+    const filteredKeys = Object.keys(updatedFields).filter(
+      (key) => !ignoreFields.includes(key)
+    );
+    const fields = filteredKeys.map((key) => `${key} = ?`).join(", ");
+    const values = filteredKeys.map((key) => updatedFields[key]);
+
+
+    await db.query(`UPDATE instructors SET ${fields} WHERE id = ?`, [
+      ...values,
+      id,
+    ]);
+    // console.log(`✅ Updated instructor with ID: ${id}`);
+    res.status(200).json({ message: "Instructor updated successfully" });
+  } catch (err) {
+    console.error("Update error:", err); // ✅ See terminal for message
+    res.status(500).json({ message: "Update failed" });
+  }
+});
+  
+  // Image upload endpoint
+  app.post("/api/upload", upload.single("image"), async (req, res) => {
+    try {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: "instructors" },
+        (err, result) => {
+          if (err) return res.status(500).json({ error: "Upload failed" });
+          res.json({ url: result.secure_url });
+        }
+      );
+      stream.end(req.file.buffer); // ✅ req.file is valid thanks to multer
+    } catch (err) {
+      console.error("Upload error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+  
+  
+
 // Update member
 app.put("/update-member/:id", async(req, res) => {
     try {

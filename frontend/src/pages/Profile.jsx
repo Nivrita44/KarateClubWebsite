@@ -8,6 +8,7 @@ export default function Profile() {
   const [userData, setUserData] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const userId = localStorage.getItem("userId");
+  const userRole = localStorage.getItem("role");
 
   const location = useLocation();
   const isActive = (path) => location.pathname.startsWith(path);
@@ -63,8 +64,7 @@ export default function Profile() {
               isActive("/profile")
                 ? "bg-red-600 text-white"
                 : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
+            }`}>
             <User className="w-5 h-5" />
             <span>My Profile</span>
           </Link>
@@ -74,8 +74,7 @@ export default function Profile() {
               isActive("/notifications")
                 ? "bg-red-600 text-white"
                 : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
+            }`}>
             <Bell className="w-5 h-5" />
             <span>Notifications</span>
           </Link>
@@ -85,8 +84,7 @@ export default function Profile() {
               isActive("/class-routine")
                 ? "bg-red-600 text-white"
                 : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
+            }`}>
             <Calendar className="w-5 h-5" />
             <span>Class Routine</span>
           </Link>
@@ -96,8 +94,7 @@ export default function Profile() {
               isActive("/exam-routine")
                 ? "bg-red-600 text-white"
                 : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
+            }`}>
             <Book className="w-5 h-5" />
             <span>Exam Routine</span>
           </Link>
@@ -107,11 +104,18 @@ export default function Profile() {
               isActive("/belt-info")
                 ? "bg-red-600 text-white"
                 : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
+            }`}>
             <Medal className="w-5 h-5" />
             <span>Belt Info</span>
           </Link>
+          {userRole === "instructor" && (
+            <Link
+              to="/instructor-dashboard"
+              className={`flex items-center space-x-2 p-3 rounded-md hover:bg-gray-200 text-blue-700 font-semibold`}>
+              <Book className="w-5 h-5" />
+              <span>Instructor Panel</span>
+            </Link>
+          )}
         </nav>
       </aside>
 
@@ -184,22 +188,19 @@ export default function Profile() {
               <>
                 <button
                   className="px-5 py-2 bg-red-600 text-white rounded-md shadow"
-                  onClick={handleSave}
-                >
+                  onClick={handleSave}>
                   Save
                 </button>
                 <button
                   className="px-5 py-2 bg-gray-300 rounded-md shadow"
-                  onClick={() => setIsEdit(false)}
-                >
+                  onClick={() => setIsEdit(false)}>
                   Cancel
                 </button>
               </>
             ) : (
               <button
                 className="px-5 py-2 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
-                onClick={() => setIsEdit(true)}
-              >
+                onClick={() => setIsEdit(true)}>
                 Edit Profile
               </button>
             )}
