@@ -110,20 +110,41 @@ app.post("/sslcommerz/init", async(req, res) => {
 app.post("/sslcommerz/success/:tran_id", async(req, res) => {
     const { tran_id } = req.params;
     try {
-        // Update transaction status to 'paid'
-        const updateQuery = `UPDATE bills SET status = 'paid' WHERE transaction_id = ?`;
-        const [result] = await sslcommerzDb.execute(updateQuery, [tran_id]);
+      // Update transaction status to 'paid'
+      const updateQuery = `UPDATE bills SET status = 'paid' WHERE transaction_id = ?`;
+      const [result] = await sslcommerzDb.execute(updateQuery, [tran_id]);
 
-        if (result.affectedRows > 0) {
-            res.redirect(`http://localhost:5173/success/${tran_id}`);
-        } else {
-            res.status(404).send("Transaction not found");
+      if (result.affectedRows > 0) {
+        // Fetch student ID by matching email in bill - student table
+        const [billInfo] = await sslcommerzDb.execute(
+          "SELECT email FROM bills WHERE transaction_id = ?",
+          [tran_id]
+        );
+
+        if (billInfo.length) {
+          const email = billInfo[0].email;
+          const [[student]] = await db.query(
+            "SELECT id FROM students WHERE email = ?",
+            [email]
+          );
+
+          if (student?.id) {
+            await db.query(
+              "INSERT INTO notifications (studentId, message, type) VALUES (?, ?, ?)",
+              [student.id, "Your payment was successful!", "payment"]
+            );
+          }
         }
+
+        res.redirect(`http://localhost:5173/success/${tran_id}`);
+      } else {
+        res.status(404).send("Transaction not found");
+      }
     } catch (error) {
-        console.error("❌ Error updating transaction status:", error);
-        res.status(500).send("Error updating transaction status");
+      console.error("❌ Error updating transaction status:", error);
+      res.status(500).send("Error updating transaction status");
     }
-});
+    });
 
 // Failure route
 app.post("/sslcommerz/fail", (req, res) => {
@@ -146,6 +167,31 @@ app.get("/api/transaction/:tran_id", async(req, res) => {
         console.error("❌ Error fetching transaction details:", error);
         res.status(500).json({ error: "Server error while fetching transaction details" });
     }
+});
+
+// SSLCommerz success: trigger payment notification
+app.post("/sslcommerz/success/:tran_id", async (req, res) => {
+  const { tran_id } = req.params;
+  try {
+    const [result] = await sslcommerzDb.execute("UPDATE bills SET status = 'paid' WHERE transaction_id = ?", [tran_id]);
+
+    if (result.affectedRows > 0) {
+      const [billInfo] = await sslcommerzDb.execute("SELECT email FROM bills WHERE transaction_id = ?", [tran_id]);
+      if (billInfo.length) {
+        const email = billInfo[0].email;
+        const [[student]] = await db.query("SELECT id FROM students WHERE email = ?", [email]);
+        if (student?.id) {
+          await db.query("INSERT INTO notifications (studentId, message, type) VALUES (?, ?, ?)", [student.id, "Your payment was successful!", "payment"]);
+        }
+      }
+      res.redirect(`http://localhost:5173/success/${tran_id}`);
+    } else {
+      res.status(404).send("Transaction not found");
+    }
+  } catch (error) {
+    console.error("❌ Error updating transaction status:", error);
+    res.status(500).send("Error updating transaction status");
+  }
 });
 
 app.get("/get-member/:id", async(req, res) => {
@@ -191,15 +237,28 @@ app.get("/api/students", async (req, res) => {
   res.json(results);
 });
 // Get student by ID
+// Student belt/certificate update route
 app.put("/api/students/:id", async (req, res) => {
   const { belt, certificate } = req.body;
-  await db.query("UPDATE students SET belt = ?, certificate = ? WHERE id = ?", [
-    belt,
-    certificate,
-    req.params.id,
-  ]);
-  res.json({ message: "Student updated" });
+  const studentId = req.params.id;
+
+  try {
+    await db.query("UPDATE students SET belt = ?, certificate = ? WHERE id = ?", [belt, certificate, studentId]);
+
+    if (belt) {
+      await db.query("INSERT INTO notifications (studentId, message, type) VALUES (?, ?, ?)", [studentId, `Your belt has been updated to ${belt}.`, "belt"]);
+    }
+    if (certificate) {
+      await db.query("INSERT INTO notifications (studentId, message, type) VALUES (?, ?, ?)", [studentId, "Your certificate has been uploaded.", "certificate"]);
+    }
+
+    res.json({ message: "Student updated" });
+  } catch (err) {
+    console.error("❌ Belt update failed:", err);
+    res.status(500).json({ error: "Update failed" });
+  }
 });
+
 //certificate image upload
 app.post(
   "/api/upload-certificate",
@@ -219,8 +278,135 @@ app.post(
     }
   }
 );
-  
-  
+// Notifications ROUTES
+
+//get/receive a notification
+// Notifications GET route
+app.get("/api/notifications", async (req, res) => {
+  const { type, studentId } = req.query;
+  let query = "SELECT * FROM notifications";
+  const params = [];
+
+  if (studentId) {
+    query += " WHERE studentId = ?";
+    params.push(studentId);
+  } else if (type) {
+    query += " WHERE type = ?";
+    params.push(type);
+  }
+  query += " ORDER BY createdAt DESC";
+  const [results] = await db.query(query, params);
+  res.json(results);
+});
+
+//send notifications(more likely announcemments here)
+app.post("/api/notifications", async (req, res) => {
+  const { studentId, message, type } = req.body;
+
+  try {
+    if (studentId) {
+      await db.query(
+        "INSERT INTO notifications (studentId, message, type) VALUES (?, ?, ?)",
+        [studentId, message, type || "announcement"]
+      );
+    } else {
+      const [students] = await db.query("SELECT id FROM students");
+      for (const student of students) {
+        await db.query(
+          "INSERT INTO notifications (studentId, message, type) VALUES (?, ?, ?)",
+          [student.id, message, "announcement"]
+        );
+      }
+    }
+
+    res.status(201).json({ message: "Notification sent." });
+  } catch (err) {
+    console.error("Notification error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+// Update notification
+app.put("/api/notifications/:id", async (req, res) => {
+  const { id } = req.params;
+  const { message, type } = req.body;
+
+  try {
+    await db.query(
+      "UPDATE notifications SET message = ?, type = ? WHERE id = ?",
+      [message, type, id]
+    );
+    res.json({ message: "Notification updated" });
+  } catch (err) {
+    console.error("Notification update error:", err);
+    res.status(500).json({ error: "Update failed" });
+  }
+});
+// Delete notification
+app.delete("/api/notifications/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await db.query("DELETE FROM notifications WHERE id = ?", [id]);
+    res.json({ message: "Notification deleted" });
+  } catch (err) {
+    console.error("Notification delete error:", err);
+    res.status(500).json({ error: "Delete failed" });
+  }
+});
+
+
+
+//  GET all announcements
+app.get("/api/announcements", async (req, res) => {
+  const [rows] = await db.query("SELECT * FROM announcements ORDER BY createdAt DESC");
+  res.json(rows);
+});
+
+// POST a new announcement
+app.post(
+  "/api/announcements",
+  upload.single("attachment"),
+  async (req, res) => {
+    const { title, content } = req.body;
+    let attachmentUrl = null;
+
+    if (req.file) {
+      const result = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "announcements" },
+          (err, result) => (err ? reject(err) : resolve(result))
+        );
+        stream.end(req.file.buffer);
+      });
+      attachmentUrl = result.secure_url;
+    }
+
+    await db.query(
+      "INSERT INTO announcements (title, content, attachmentUrl) VALUES (?, ?, ?)",
+      [title, content, attachmentUrl]
+    );
+
+    res.status(201).json({ message: "Announcement created" });
+  }
+);
+
+
+// PUT (update) an announcement
+app.put("/api/announcements/:id", async (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+  await db.query("UPDATE announcements SET title = ?, content = ? WHERE id = ?", [title, content, id]);
+  res.json({ message: "Announcement updated" });
+});
+
+//  DELETE an announcement
+app.delete("/api/announcements/:id", async (req, res) => {
+  const { id } = req.params;
+  await db.query("DELETE FROM announcements WHERE id = ?", [id]);
+  res.json({ message: "Announcement deleted" });
+});
+
+
 
 // Add a new student
 
@@ -499,6 +685,91 @@ app.put("/update-member/:id", async(req, res) => {
         console.error("❌ Database error:", err);
         res.status(500).json({ message: "Database Error", error: err });
     }
+});
+
+// Get about club content
+app.get("/api/about", async (req, res) => {
+  const [rows] = await db.query("SELECT * FROM about_club");
+  res.json(rows);
+});
+
+// Update about club content
+app.put("/api/about", async (req, res) => {
+  const updates = req.body; // { section: content }
+
+  try {
+    for (const section in updates) {
+      const [exists] = await db.query("SELECT * FROM about_club WHERE section = ?", [section]);
+      if (exists.length > 0) {
+        await db.query("UPDATE about_club SET content = ? WHERE section = ?", [updates[section], section]);
+      } else {
+        await db.query("INSERT INTO about_club (section, content) VALUES (?, ?)", [section, updates[section]]);
+      }
+    }
+
+    res.json({ message: "About Club content updated." });
+  } catch (err) {
+    console.error("❌ Error updating about_club:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// Get student belt info
+app.get("/api/student/:id/belt-info", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [rows] = await db.query(
+      "SELECT name, belt, certificate, createdAt, updatedAt FROM students WHERE id = ?",
+      [id]
+    );
+    if (rows.length > 0) {
+      res.json(rows[0]);
+    } else {
+      res.status(404).json({ message: "Student not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching belt info", error: err });
+  }
+});
+
+// Fetch all exam routines
+app.get("/api/exams", async (req, res) => {
+  try {
+    const [results] = await db.query("SELECT * FROM exams ORDER BY date ASC");
+    res.json(results);
+  } catch (error) {
+    console.error("Error fetching exams:", error);
+    res.status(500).json({ message: "Failed to fetch exams" });
+  }
+});
+
+
+// Fetch exams by belt level
+app.get("/api/exams/:belt", async (req, res) => {
+  const { belt } = req.params;
+  try {
+    const [rows] = await db.query("SELECT * FROM exam_routine WHERE belt = ?", [belt]);
+    res.json(rows);
+  } catch (err) {
+    console.error("❌ Belt exam fetch error:", err);
+    res.status(500).json({ error: "Failed to fetch exams for belt" });
+  }
+});
+
+app.post("/api/exams", async (req, res) => {
+  const { date, time, belt, examiner, location } = req.body;
+
+  try {
+    const sql = `
+      INSERT INTO exams (date, time, belt, examiner, location)
+      VALUES (?, ?, ?, ?, ?)
+    `;
+    await db.query(sql, [date, time, belt, examiner, location]);
+    res.status(201).json({ message: "Exam routine added successfully." });
+  } catch (err) {
+    console.error("❌ Exam insert error:", err);
+    res.status(500).json({ error: "Database error" });
+  }
 });
 
 

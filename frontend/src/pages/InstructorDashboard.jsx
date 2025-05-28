@@ -8,7 +8,9 @@ import {
   Info,
   ChevronLeft,
   ChevronRight,
+  Book, 
 } from "lucide-react";
+
 
 const InstructorDashboard = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -75,6 +77,16 @@ const InstructorDashboard = () => {
               }>
               <Megaphone />
               {!isCollapsed && <span>Announcements</span>}
+            </NavLink>
+            <NavLink
+              to="exams"
+              className={({ isActive }) =>
+                `flex items-center gap-2 p-2 rounded hover:bg-gray-100 ${
+                  isActive ? "bg-red-100 text-red-600" : ""
+                }`
+              }>
+              <Book />
+              {!isCollapsed && <span>Manage Exams</span>}
             </NavLink>
 
             <NavLink

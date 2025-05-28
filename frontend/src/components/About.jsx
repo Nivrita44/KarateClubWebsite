@@ -13,8 +13,8 @@ const About = () => {
         {/* Left Column: Image */}
         <div className="relative">
           <img
-            src="images/hover-photo.jpg"
-            alt="Main Image"
+            src="/frontend/src/pages/sust karate.png"
+            alt="SUST Karate"
             className="w-full h-auto rounded-lg shadow-lg"
           />
         </div>
@@ -29,8 +29,7 @@ const About = () => {
                 activeTab === "About Us"
                   ? "text-blue-500 border-b-4 border-blue-600"
                   : "text-gray-600"
-              } rounded-lg`}
-            >
+              } rounded-lg`}>
               About Us
             </button>
             <button
@@ -39,8 +38,7 @@ const About = () => {
                 activeTab === "Mission"
                   ? "text-blue-500 border-b-4 border-blue-600"
                   : "text-gray-600"
-              } rounded-lg`}
-            >
+              } rounded-lg`}>
               Mission
             </button>
             <button
@@ -49,8 +47,7 @@ const About = () => {
                 activeTab === "Vision"
                   ? "text-blue-500 border-b-4 border-blue-600"
                   : "text-gray-600"
-              } rounded-lg`}
-            >
+              } rounded-lg`}>
               Vision
             </button>
           </div>

@@ -1,34 +1,33 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { Bell, Book, Calendar, MapPin, Medal, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
+const beltColorMap = {
+  "White Belt": "bg-gray-200 text-gray-800",
+  "Yellow Belt": "bg-yellow-300 text-yellow-900",
+  "Orange Belt": "bg-orange-400 text-white",
+  "Green Belt": "bg-green-400 text-white",
+  "Blue Belt": "bg-blue-400 text-white",
+  "Purple Belt": "bg-purple-400 text-white",
+  "Brown Belt": "bg-amber-600 text-white",
+  "Black Belt": "bg-black text-white",
+};
+
+
+
 export default function ExamRoutine() {
-  const exams = [
-    {
-      date: "Sunday, June 15, 2025",
-      time: "3:00 PM",
-      belt: "Blue",
-      examiner: "Sensei Williams",
-      location: "Main Dojo",
-      beltColor: "bg-blue-200 text-blue-800",
-    },
-    {
-      date: "Saturday, September 20, 2025",
-      time: "2:00 PM",
-      belt: "Purple",
-      examiner: "Sensei Rodriguez",
-      location: "Main Dojo",
-      beltColor: "bg-purple-200 text-purple-800",
-    },
-    {
-      date: "Wednesday, December 10, 2025",
-      time: "4:00 PM",
-      belt: "Brown",
-      examiner: "Master Tanaka",
-      location: "Main Dojo ",
-      beltColor: "bg-amber-300 text-amber-800",
-    },
-  ];
+  const [exams, setExams] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/exams")
+      .then((res) => setExams(res.data))
+      .catch((err) => console.error("Failed to fetch exams", err));
+  }, []);
+
   const location = useLocation();
+
 
   const isActive = (path) => location.pathname.startsWith(path);
 
@@ -46,8 +45,7 @@ export default function ExamRoutine() {
               isActive("/profile")
                 ? "bg-red-600 text-white"
                 : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
+            }`}>
             <User className="w-5 h-5" />
             <span>My Profile</span>
           </Link>
@@ -58,8 +56,7 @@ export default function ExamRoutine() {
               isActive("/notifications")
                 ? "bg-red-600 text-white"
                 : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
+            }`}>
             <Bell className="w-5 h-5" />
             <span>Notifications</span>
           </Link>
@@ -70,8 +67,7 @@ export default function ExamRoutine() {
               isActive("/class-routine")
                 ? "bg-red-600 text-white"
                 : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
+            }`}>
             <Calendar className="w-5 h-5" />
             <span>Class Routine</span>
           </Link>
@@ -82,8 +78,7 @@ export default function ExamRoutine() {
               isActive("/exam-routine")
                 ? "bg-red-600 text-white"
                 : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
+            }`}>
             <Book className="w-5 h-5" />
             <span>Exam Routine</span>
           </Link>
@@ -94,8 +89,7 @@ export default function ExamRoutine() {
               isActive("/belt-info")
                 ? "bg-red-600 text-white"
                 : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
+            }`}>
             <Medal className="w-5 h-5" />
             <span>Belt Info</span>
           </Link>
@@ -132,8 +126,7 @@ export default function ExamRoutine() {
                 {exams.map((exam, index) => (
                   <tr
                     key={index}
-                    className="border-b border-gray-100 hover:bg-gray-50"
-                  >
+                    className="border-b border-gray-100 hover:bg-gray-50">
                     <td className="py-3 px-4 flex items-center space-x-2">
                       <Calendar className="w-4 h-4 text-gray-500" />
                       <span>{exam.date}</span>
@@ -141,8 +134,9 @@ export default function ExamRoutine() {
                     <td className="py-3 px-4">{exam.time}</td>
                     <td className="py-3 px-4">
                       <span
-                        className={`px-2 py-1 rounded-full text-sm font-semibold ${exam.beltColor}`}
-                      >
+                        className={`px-2 py-1 rounded-full text-sm font-semibold ${
+                          beltColorMap[exam.belt] || "bg-gray-100 text-gray-500"
+                        }`}>
                         {exam.belt}
                       </span>
                     </td>

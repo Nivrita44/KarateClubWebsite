@@ -8,7 +8,7 @@ export default function Profile() {
   const [userData, setUserData] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const userId = localStorage.getItem("userId");
-  const userRole = localStorage.getItem("role");
+  // const userRole = localStorage.getItem("role");
 
   const location = useLocation();
   const isActive = (path) => location.pathname.startsWith(path);
@@ -108,14 +108,6 @@ export default function Profile() {
             <Medal className="w-5 h-5" />
             <span>Belt Info</span>
           </Link>
-          {userRole === "instructor" && (
-            <Link
-              to="/instructor-dashboard"
-              className={`flex items-center space-x-2 p-3 rounded-md hover:bg-gray-200 text-blue-700 font-semibold`}>
-              <Book className="w-5 h-5" />
-              <span>Instructor Panel</span>
-            </Link>
-          )}
         </nav>
       </aside>
 
