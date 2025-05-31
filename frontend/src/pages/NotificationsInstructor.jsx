@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 const Notifications = () => {
   const [students, setStudents] = useState([]);
@@ -118,7 +118,7 @@ const Notifications = () => {
 
         <button
           onClick={sendNotification}
-          className="bg-blue-600 text-white px-4 py-2 rounded mt-2 hover:bg-blue-700">
+          className="bg-red-800 text-white px-4 py-2 rounded mt-2 hover:bg-red-700">
           Send Notification
         </button>
       </div>
@@ -158,7 +158,7 @@ const Notifications = () => {
                 <div className="space-x-2">
                   <button
                     onClick={() => startEdit(note)}
-                    className="text-blue-500 hover:underline">
+                    className="text-red-500 hover:underline">
                     Edit
                   </button>
                   <button

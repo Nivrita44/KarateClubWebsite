@@ -2,17 +2,23 @@ import { Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import About from "./pages/About";
+import AdminExamForm from "./pages/AdminExamForm";
+import Announcements from "./pages/Announcements";
 import BeltInfo from "./pages/BeltInfo";
 import ClassRoutine from "./pages/ClassRoutine";
 import Contact from "./pages/Contact";
+import EditAboutClub from "./pages/EditAboutClub";
 import ExamRoutine from "./pages/ExamRoutine";
 import Gallery from "./pages/Gallery";
 import Home from "./pages/Home";
+import InstructorDashboard from "./pages/InstructorDashboard";
+import InstructorLogin from "./pages/InstructorLogin";
 import InstructorProfile from "./pages/InstructorProfile";
 import Instructors from "./pages/Instructors";
 import JoinUsPage from "./pages/JoinUs";
 import Login from "./pages/Login";
-import InstructorLogin from "./pages/InstructorLogin";
+import ManageStudents from "./pages/ManageStudents";
+import NotAuthorized from "./pages/NotAuthorized";
 import Notifications from "./pages/Notifications";
 import NotificationsInstructor from "./pages/NotificationsInstructor";
 import PaymentPage from "./pages/PaymentPage";
@@ -20,13 +26,6 @@ import PendingPage from "./pages/PendingPage";
 import Profile from "./pages/Profile";
 import SuccessPage from "./pages/SuccessPage";
 import UpcomingEvents from "./pages/UpcomingEvents";
-import InstructorDashboard from "./pages/InstructorDashboard";
-import ManageStudents from "./pages/ManageStudents";
-import ProtectedInstructorRoute from "./routes/ProtectedInstructorRoute";
-import NotAuthorized from "./pages/NotAuthorized";
-import Announcements from "./pages/Announcements";
-import EditAboutClub from "./pages/EditAboutClub";
-import AdminExamForm from "./pages/AdminExamForm";
 
 
 const App = () => {
@@ -45,7 +44,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/instructor-login" element={<InstructorLogin />} />
         <Route path="/instructor-dashboard" element={<InstructorDashboard />}>
-          <Route index element={<Home />} />
+          <Route index element={<InstructorProfile />} />
           <Route path="profile" element={<InstructorProfile />} />
           <Route path="students" element={<ManageStudents />} />
           <Route path="notifications" element={<NotificationsInstructor />} />

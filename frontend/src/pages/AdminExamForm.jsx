@@ -1,5 +1,5 @@
-import { useState } from "react";
 import axios from "axios";
+import { useState } from "react";
 
 const AdminExamForm = () => {
   const [form, setForm] = useState({
@@ -76,7 +76,7 @@ const AdminExamForm = () => {
         />
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded">
+          className="bg-red-800 text-white px-4 py-2 rounded">
           Save Exam
         </button>
       </form>

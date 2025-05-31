@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const InstructorLogin = () => {
@@ -82,7 +82,7 @@ const InstructorLogin = () => {
           <div className="text-center">
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+              className="w-full bg-red-800 text-white px-6 py-2 rounded-lg hover:bg-red-800"
               disabled={loading}>
               {loading ? "Logging in..." : "Login as Instructor"}
             </button>

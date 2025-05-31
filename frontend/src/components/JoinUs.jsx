@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const JoinUs = () => {
@@ -338,7 +338,7 @@ const JoinUs = () => {
         <div className="mt-6 text-center">
           <button
             type="submit"
-            className="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800">
+            className="bg-red-800 text-white px-6 py-2 rounded hover:bg-red-800">
             Submit Application
           </button>
         </div>
@@ -346,7 +346,7 @@ const JoinUs = () => {
           <p className="text-gray-600">
             Already a member of the club?{" "}
             <span
-              className="text-blue-600 cursor-pointer hover:underline"
+              className="text-red-800 cursor-pointer hover:underline"
               onClick={() => navigate("/login")}>
               Login
             </span>

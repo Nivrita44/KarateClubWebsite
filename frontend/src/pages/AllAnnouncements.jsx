@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function AllAnnouncements() {
   const [announcements, setAnnouncements] = useState([]);
@@ -23,7 +23,7 @@ export default function AllAnnouncements() {
                 href={a.attachmentUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 underline text-sm">
+                className="text-red-600 underline text-sm">
                 📎 View Attachment
               </a>
             )}

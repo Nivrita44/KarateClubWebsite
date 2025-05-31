@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 const EditAboutClub = () => {
   const [content, setContent] = useState({
@@ -54,7 +54,7 @@ const EditAboutClub = () => {
       <button
         onClick={handleSave}
         disabled={saving}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-700">
         {saving ? "Saving..." : "Save Changes"}
       </button>
     </div>

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Make sure axios is installed
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Instructors = () => {
   const [instructors, setInstructors] = useState([]); // State to store instructors
@@ -38,7 +38,7 @@ const Instructors = () => {
   return (
     <div className="flex flex-col items-center gap-4 my-16 text-gray-900 md:mx-10">
       <h1 className="text-3xl font-medium">All Instructors</h1>
-      <p className="sm:w-1/3 text-center text-sm">
+      <p className="sm:w-1/3 text-center text-sm text-red-800">
         Browse through our list of skilled instructors.
       </p>
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-5">

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function Announcements() {
   const [announcements, setAnnouncements] = useState([]);
@@ -87,7 +87,7 @@ export default function Announcements() {
         />
         <button
           onClick={handleSubmit}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-700">
           {editingId ? "Update Announcement" : "Post Announcement"}
         </button>
       </div>
@@ -106,12 +106,12 @@ export default function Announcements() {
               <div className="flex gap-2">
                 <button
                   onClick={() => handleEdit(a)}
-                  className="text-blue-600 hover:underline">
+                  className="text-red-600 hover:underline">
                   Edit
                 </button>
                 <button
                   onClick={() => handleDelete(a.id)}
-                  className="text-red-600 hover:underline">
+                  className="text-red-800 hover:underline">
                   Delete
                 </button>
               </div>

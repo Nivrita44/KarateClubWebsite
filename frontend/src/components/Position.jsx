@@ -1,4 +1,3 @@
-import React from "react";
 
 const Position = () => {
   return (
@@ -7,7 +6,7 @@ const Position = () => {
         Shahjalal University of Science and Technology
       </p>
 
-      <h2 className="text-4xl font-bold text-blue-600 pb-6">
+      <h2 className="text-4xl font-bold text-red-800 pb-6">
         SUST Karate Club
       </h2>
 

@@ -1,7 +1,7 @@
-import { Bell, Book, Calendar, Medal, User } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { Bell, Book, Calendar, Medal, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 export default function BeltInfo() {
   const userId = localStorage.getItem("userId");

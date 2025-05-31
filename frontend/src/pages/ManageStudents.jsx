@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 const beltColors = {
   "White Belt": "bg-gray-200 text-gray-800",
@@ -144,7 +144,7 @@ const ManageStudents = () => {
         <button
           onClick={handleBulkUpdate}
           disabled={!bulkBelt || selectedIds.length === 0}
-          className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50">
+          className="bg-red-800 text-white px-4 py-2 rounded disabled:opacity-50">
           Apply to {selectedIds.length} students
         </button>
       </div>

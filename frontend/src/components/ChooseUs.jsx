@@ -1,4 +1,3 @@
-import React from "react";
 
 const ChooseUs = () => {
   return (
@@ -8,7 +7,7 @@ const ChooseUs = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Self Defense */}
           <div className="flex items-start gap-4">
-            <div className="bg-blue-700 p-4 rounded-full text-white">
+            <div className="bg-red-800 p-4 rounded-full text-white">
               <i className="fas fa-shield-alt text-xl"></i>
             </div>
             <div>
@@ -22,7 +21,7 @@ const ChooseUs = () => {
 
           {/* Security */}
           <div className="flex items-start gap-4">
-            <div className="bg-blue-700 p-4 rounded-full text-white">
+            <div className="bg-red-800 p-4 rounded-full text-white">
               <i className="fas fa-lock text-xl"></i>
             </div>
             <div>
@@ -36,7 +35,7 @@ const ChooseUs = () => {
 
           {/* Fitness */}
           <div className="flex items-start gap-4">
-            <div className="bg-blue-700 p-4 rounded-full text-white">
+            <div className="bg-red-800 p-4 rounded-full text-white">
               <i className="fas fa-heartbeat text-xl"></i>
             </div>
             <div>
@@ -50,7 +49,7 @@ const ChooseUs = () => {
 
           {/* Confidence */}
           <div className="flex items-start gap-4">
-            <div className="bg-blue-700 p-4 rounded-full text-white">
+            <div className="bg-red-800 p-4 rounded-full text-white">
               <i className="fas fa-check-circle text-xl"></i>
             </div>
             <div>
@@ -65,9 +64,9 @@ const ChooseUs = () => {
       </div>
 
       {/* * Right-side Image * */}
-      <div className="choose-image w-full md:w-1/2 mt-10 md:mt-0">
+      <div className="choose-image w-full md:w-1/2 mt-10 md:mt-0 md:ml-10">
         <img
-          src="/assets/image.png"
+          src=".\src\assets\img1.jpg"
           alt="Karate Training"
           className="w-full rounded-lg shadow-md"
         />

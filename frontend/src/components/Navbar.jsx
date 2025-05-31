@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 
@@ -45,53 +45,54 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400">
+    <div className="flex items-center justify-between text-sm py-2 mb-2 border-b border-b-gray-400 z-50 relative">
       <img
         onClick={() => navigate("/")}
-        className="w-44 cursor-pointer"
+        className="w-32 cursor-pointer"
         src={assets.logo}
         alt="Logo"
       />
 
-      <ul className="hidden md:flex items-start gap-5 font-medium">
-        <NavLink to="/">
-          <li className="py-1">HOME</li>
+      <ul className="hidden md:flex items-start gap-5 text-lg font-semibold">
+  <NavLink to="/">
+    <li className="py-1">HOME</li>
+  </NavLink>
+  <NavLink to="/instructors">
+    <li className="py-1">ALL INSTRUCTORS</li>
+  </NavLink>
+  <NavLink to="/about">
+    <li className="py-1">ABOUT CLUB</li>
+  </NavLink>
+  {/* <div
+    className="relative"
+    onMouseEnter={openDropdown}
+    onMouseLeave={delayedCloseDropdown}>
+    <button className="py-1 font-semibold text-lg" onClick={openDropdown}>
+      EVENTS
+    </button>
+    {isDropdownOpen && (
+      <div
+        className="absolute left-0 mt-2 w-40 bg-white shadow-md rounded-lg border z-50"
+        onMouseEnter={openDropdown}
+        onMouseLeave={delayedCloseDropdown}>
+        <NavLink
+          to="/events/previous"
+          className="block px-4 py-2 hover:bg-gray-100 font-medium text-base">
+          Previous Events
         </NavLink>
-        <NavLink to="/instructors">
-          <li className="py-1">ALL INSTRUCTORS</li>
+        <NavLink
+          to="/events/upcoming"
+          className="block px-4 py-2 hover:bg-gray-100 font-medium text-base">
+          Upcoming Events
         </NavLink>
-        <NavLink to="/about">
-          <li className="py-1">ABOUT CLUB</li>
-        </NavLink>
-        <div
-          className="relative"
-          onMouseEnter={openDropdown}
-          onMouseLeave={delayedCloseDropdown}>
-          <button className="py-1" onClick={openDropdown}>
-            EVENTS
-          </button>
-          {isDropdownOpen && (
-            <div
-              className="absolute left-0 mt-2 w-40 bg-white shadow-md rounded-lg border"
-              onMouseEnter={openDropdown}
-              onMouseLeave={delayedCloseDropdown}>
-              <NavLink
-                to="/events/previous"
-                className="block px-4 py-2 hover:bg-gray-100">
-                Previous Events
-              </NavLink>
-              <NavLink
-                to="/events/upcoming"
-                className="block px-4 py-2 hover:bg-gray-100">
-                Upcoming Events
-              </NavLink>
-            </div>
-          )}
-        </div>
-        <NavLink to="/gallery">
-          <li className="py-1">GALLERY</li>
-        </NavLink>
-      </ul>
+      </div>
+    )}
+  </div> */}
+  <NavLink to="/gallery">
+    <li className="py-1">GALLERY</li>
+  </NavLink>
+</ul>
+
 
       <div className="flex items-center gap-4">
         {user ? (
@@ -144,12 +145,12 @@ const Navbar = () => {
           <div className="flex gap-4">
             <button
               onClick={() => navigate("/instructor-login")}
-              className="bg-white text-primary border border-primary px-6 py-2 rounded-full font-light hidden md:block">
+              className="bg-white text-red-800 border border-red-800 px-6 py-2 rounded-full font-light hidden md:block">
               Login as Instructor
             </button>
             <button
               onClick={() => navigate("/join-us")}
-              className="bg-primary text-white px-8 py-3 rounded-full font-light hidden md:block">
+              className="bg-red-800 text-white px-8 py-3 rounded-full font-light hidden md:block">
               Join Us
             </button>
           </div>

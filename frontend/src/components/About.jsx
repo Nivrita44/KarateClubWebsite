@@ -13,7 +13,7 @@ const About = () => {
         {/* Left Column: Image */}
         <div className="relative">
           <img
-            src="/frontend/src/pages/sust karate.png"
+            src=".\src\assets\SUST_Karate.jpg"
             alt="SUST Karate"
             className="w-full h-auto rounded-lg shadow-lg"
           />
@@ -27,7 +27,7 @@ const About = () => {
               onClick={() => handleTabChange("About Us")}
               className={`px-4 py-2 text-lg font-semibold ${
                 activeTab === "About Us"
-                  ? "text-blue-500 border-b-4 border-blue-600"
+                  ? "text-red-800 border-b-4 border-red-800"
                   : "text-gray-600"
               } rounded-lg`}>
               About Us
@@ -36,7 +36,7 @@ const About = () => {
               onClick={() => handleTabChange("Mission")}
               className={`px-4 py-2 text-lg font-semibold ${
                 activeTab === "Mission"
-                  ? "text-blue-500 border-b-4 border-blue-600"
+                  ? "text-red-800 border-b-4 border-red-800"
                   : "text-gray-600"
               } rounded-lg`}>
               Mission
@@ -45,7 +45,7 @@ const About = () => {
               onClick={() => handleTabChange("Vision")}
               className={`px-4 py-2 text-lg font-semibold ${
                 activeTab === "Vision"
-                  ? "text-blue-500 border-b-4 border-blue-600"
+                  ? "text-red-800 border-b-4 border-red-800"
                   : "text-gray-600"
               } rounded-lg`}>
               Vision

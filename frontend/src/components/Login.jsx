@@ -85,7 +85,7 @@ const Login = () => {
           <div className="text-center">
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all shadow-md"
+              className="w-full bg-red-800 text-white px-6 py-2 rounded-lg hover:bg-red-800 transition-all shadow-md"
               disabled={loading}
             >
               {loading ? "Logging in..." : "Login"}
@@ -98,7 +98,7 @@ const Login = () => {
           <p className="text-gray-600">
             Not a member?{" "}
             <span
-              className="text-blue-600 cursor-pointer hover:underline"
+              className="text-red-800 cursor-pointer hover:underline"
               onClick={() => navigate("/join-us")}
             >
               Join Now
