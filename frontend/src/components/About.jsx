@@ -1,4 +1,5 @@
 import { useState } from "react";
+import karateImage from "../assets/SUST_Karate.jpg";
 
 const About = () => {
   const [activeTab, setActiveTab] = useState("About Us");
@@ -13,7 +14,7 @@ const About = () => {
         {/* Left Column: Image */}
         <div className="relative">
           <img
-            src=".\src\assets\SUST_Karate.jpg"
+            src={karateImage}
             alt="SUST Karate"
             className="w-full h-auto rounded-lg shadow-lg"
           />
@@ -21,74 +22,48 @@ const About = () => {
 
         {/* Right Column: Description & Tabs */}
         <div className="text-center md:text-left">
-          {/* Horizontal Tab Links */}
-          <div className="flex justify-center gap-6 mb-6">
-            <button
-              onClick={() => handleTabChange("About Us")}
-              className={`px-4 py-2 text-lg font-semibold ${
-                activeTab === "About Us"
-                  ? "text-red-800 border-b-4 border-red-800"
-                  : "text-gray-600"
-              } rounded-lg`}>
-              About Us
-            </button>
-            <button
-              onClick={() => handleTabChange("Mission")}
-              className={`px-4 py-2 text-lg font-semibold ${
-                activeTab === "Mission"
-                  ? "text-red-800 border-b-4 border-red-800"
-                  : "text-gray-600"
-              } rounded-lg`}>
-              Mission
-            </button>
-            <button
-              onClick={() => handleTabChange("Vision")}
-              className={`px-4 py-2 text-lg font-semibold ${
-                activeTab === "Vision"
-                  ? "text-red-800 border-b-4 border-red-800"
-                  : "text-gray-600"
-              } rounded-lg`}>
-              Vision
-            </button>
+          {/* Tab Buttons */}
+          <div className="flex justify-center md:justify-start gap-6 mb-6">
+            {["About Us", "Mission", "Vision"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => handleTabChange(tab)}
+                className={`px-4 py-2 text-lg font-semibold transition duration-200 ${
+                  activeTab === tab
+                    ? "text-primary border-b-4 border-accent"
+                    : "text-gray-500 hover:text-primary"
+                }`}>
+                {tab}
+              </button>
+            ))}
           </div>
 
-          {/* Tab Contents */}
-          {activeTab === "About Us" && (
-            <div className="tab-contents">
-              <p className="text-lg text-gray-700">
-                SUST Karate Club is one of the most active clubs at Daffodil
-                International University. Launched in July 2019 to ensure the
-                safety of the students, especially girls, the club has already
-                won Gold, Silver, and Bronze multiple times for Daffodil
-                International University by participating in national-level
-                karate competitions.
+          {/* Tab Content */}
+          <div className="text-base md:text-lg text-gray-700 leading-relaxed">
+            {activeTab === "About Us" && (
+              <p>
+                SUST Karate Club is a leading martial arts club dedicated to
+                self-defense and athletic excellence. Since launching in 2019,
+                the club has empowered students—especially women—with confidence
+                and discipline through competitive and practical training.
               </p>
-            </div>
-          )}
-
-          {activeTab === "Mission" && (
-            <div className="tab-contents">
-              <p className="text-lg text-gray-700">
-                We are working on the theme "Learn karate, be confident &
-                protect yourself". The main goal of the Karate-Do Club is to
-                provide self-defense training to Daffodil students. Winning
-                national and international competitions and spreading the
-                reputation of Daffodil International University in the field of
-                karate.
+            )}
+            {activeTab === "Mission" && (
+              <p>
+                Our mission is simple: “Learn karate, be confident, protect
+                yourself.” We aim to equip SUST students with self-defense
+                skills while excelling in national and international
+                competitions.
               </p>
-            </div>
-          )}
-
-          {activeTab === "Vision" && (
-            <div className="tab-contents">
-              <p className="text-lg text-gray-700">
-                We want our university's reputation to spread in the karate
-                arena and to emerge as a strong competitor in the competition.
-                Besides, let the students of our university stay safe at all
-                times by learning self-defense.
+            )}
+            {activeTab === "Vision" && (
+              <p>
+                We envision SUST standing tall as a leading name in the karate
+                circuit. Our goal is to build a safe and confident student
+                community that thrives in both security and sportsmanship.
               </p>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

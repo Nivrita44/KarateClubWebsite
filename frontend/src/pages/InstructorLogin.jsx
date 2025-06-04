@@ -82,7 +82,7 @@ const InstructorLogin = () => {
           <div className="text-center">
             <button
               type="submit"
-              className="w-full bg-red-800 text-white px-6 py-2 rounded-lg hover:bg-red-800"
+              className="w-full bg-primary text-accent px-6 py-2 rounded-lg hover:bg-accent hover:text-primary transition duration-200 disabled:opacity-50"
               disabled={loading}>
               {loading ? "Logging in..." : "Login as Instructor"}
             </button>

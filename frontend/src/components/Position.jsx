@@ -6,7 +6,7 @@ const Position = () => {
         Shahjalal University of Science and Technology
       </p>
 
-      <h2 className="text-4xl font-bold text-red-800 pb-6">
+      <h2 className="text-4xl md:text-5xl font-bold text-primary pb-6">
         SUST Karate Club
       </h2>
 

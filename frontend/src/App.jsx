@@ -14,6 +14,7 @@ import Home from "./pages/Home";
 import InstructorDashboard from "./pages/InstructorDashboard";
 import InstructorLogin from "./pages/InstructorLogin";
 import InstructorProfile from "./pages/InstructorProfile";
+import PublicInstructorProfile from "./pages/PublicInstructorProfile";
 import Instructors from "./pages/Instructors";
 import JoinUsPage from "./pages/JoinUs";
 import Login from "./pages/Login";
@@ -38,6 +39,10 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/contact" element={<Contact />} />
+        <Route
+          path="/instructor-public/:ins_id"
+          element={<PublicInstructorProfile />}
+        />
         <Route path="/join-us" element={<JoinUsPage />} />
         <Route path="/pending" element={<PendingPage />} />
         <Route path="/payment/:id" element={<PaymentPage />} />

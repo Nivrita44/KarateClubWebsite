@@ -88,7 +88,7 @@ const JoinUs = () => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
               required
             />
           </div>
@@ -99,7 +99,7 @@ const JoinUs = () => {
               name="guardian"
               value={formData.guardian}
               onChange={handleChange}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
               required
             />
           </div>
@@ -114,7 +114,7 @@ const JoinUs = () => {
               name="relation"
               value={formData.relation}
               onChange={handleChange}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
               required
             />
           </div>
@@ -125,7 +125,7 @@ const JoinUs = () => {
               name="dateOfBirth"
               value={formData.dateOfBirth}
               onChange={handleChange}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
               required
             />
           </div>
@@ -140,7 +140,7 @@ const JoinUs = () => {
               name="studentID"
               value={formData.studentID}
               onChange={handleChange}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
               required
             />
           </div>
@@ -150,7 +150,7 @@ const JoinUs = () => {
               name="campus"
               value={formData.campus}
               onChange={handleChange}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
               required>
               <option value="">Select</option>
               <option value="SUST">SUST</option>
@@ -169,7 +169,7 @@ const JoinUs = () => {
               name="department"
               value={formData.department}
               onChange={handleChange}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
               required
             />
           </div>
@@ -179,7 +179,7 @@ const JoinUs = () => {
               name="gender"
               value={formData.gender}
               onChange={handleChange}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
               required>
               <option value="">Select</option>
               <option value="Male">Male</option>
@@ -198,7 +198,7 @@ const JoinUs = () => {
               name="bloodGroup"
               value={formData.bloodGroup}
               onChange={handleChange}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
               required
             />
           </div>
@@ -209,7 +209,7 @@ const JoinUs = () => {
               name="height"
               value={formData.height}
               onChange={handleChange}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
               required
             />
           </div>
@@ -220,7 +220,7 @@ const JoinUs = () => {
               name="weight"
               value={formData.weight}
               onChange={handleChange}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
               required
             />
           </div>
@@ -234,7 +234,7 @@ const JoinUs = () => {
             name="currentAddress"
             value={formData.currentAddress}
             onChange={handleChange}
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
             required
           />
         </div>
@@ -246,7 +246,7 @@ const JoinUs = () => {
             name="permanentAddress"
             value={formData.permanentAddress}
             onChange={handleChange}
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
             required
           />
         </div>
@@ -258,7 +258,7 @@ const JoinUs = () => {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
             required
           />
         </div>
@@ -270,7 +270,7 @@ const JoinUs = () => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
             required
           />
         </div>
@@ -282,7 +282,7 @@ const JoinUs = () => {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
             required
           />
         </div>
@@ -294,7 +294,7 @@ const JoinUs = () => {
             name="nationalID"
             value={formData.nationalID}
             onChange={handleChange}
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
             required
           />
         </div>
@@ -308,7 +308,7 @@ const JoinUs = () => {
               name="religion"
               value={formData.religion}
               onChange={handleChange}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
               required
             />
           </div>
@@ -318,7 +318,7 @@ const JoinUs = () => {
               type="file"
               name="image"
               onChange={handleImageChange}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
               required
             />
           </div>
@@ -329,7 +329,7 @@ const JoinUs = () => {
               name="previousExperience"
               value={formData.previousExperience}
               onChange={handleChange}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
               rows="2"></textarea>
           </div>
         </div>
@@ -338,7 +338,7 @@ const JoinUs = () => {
         <div className="mt-6 text-center">
           <button
             type="submit"
-            className="bg-red-800 text-white px-6 py-2 rounded hover:bg-red-800">
+            className="bg-primary text-accent px-6 py-2 rounded hover:bg-accent hover:text-primary transition duration-200">
             Submit Application
           </button>
         </div>
@@ -346,7 +346,7 @@ const JoinUs = () => {
           <p className="text-gray-600">
             Already a member of the club?{" "}
             <span
-              className="text-red-800 cursor-pointer hover:underline"
+              className="text-primary cursor-pointer hover:text-accent underline-offset-2 hover:underline"
               onClick={() => navigate("/login")}>
               Login
             </span>

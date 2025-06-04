@@ -53,17 +53,17 @@ const Navbar = () => {
         alt="Logo"
       />
 
-      <ul className="hidden md:flex items-start gap-5 text-lg font-semibold">
-  <NavLink to="/">
-    <li className="py-1">HOME</li>
-  </NavLink>
-  <NavLink to="/instructors">
-    <li className="py-1">ALL INSTRUCTORS</li>
-  </NavLink>
-  <NavLink to="/about">
-    <li className="py-1">ABOUT CLUB</li>
-  </NavLink>
-  {/* <div
+      <ul className="hidden md:flex items-start gap-6 text-base font-medium tracking-wide text-primary">
+        <NavLink to="/">
+          <li className="hover:text-accent transition">HOME</li>
+        </NavLink>
+        <NavLink to="/instructors">
+          <li className="hover:text-accent transition">ALL INSTRUCTORS</li>
+        </NavLink>
+        <NavLink to="/about">
+          <li className="hover:text-accent transition">ABOUT CLUB</li>
+        </NavLink>
+        {/* <div
     className="relative"
     onMouseEnter={openDropdown}
     onMouseLeave={delayedCloseDropdown}>
@@ -88,11 +88,10 @@ const Navbar = () => {
       </div>
     )}
   </div> */}
-  <NavLink to="/gallery">
-    <li className="py-1">GALLERY</li>
-  </NavLink>
-</ul>
-
+        <NavLink to="/gallery">
+          <li className="hover:text-accent transition">GALLERY</li>
+        </NavLink>
+      </ul>
 
       <div className="flex items-center gap-4">
         {user ? (
@@ -145,12 +144,13 @@ const Navbar = () => {
           <div className="flex gap-4">
             <button
               onClick={() => navigate("/instructor-login")}
-              className="bg-white text-red-800 border border-red-800 px-6 py-2 rounded-full font-light hidden md:block">
+              className="border border-primary text-primary hover:bg-primary hover:text-accent px-6 py-2 rounded-full font-light hidden md:block transition duration-200">
               Login as Instructor
             </button>
+
             <button
               onClick={() => navigate("/join-us")}
-              className="bg-red-800 text-white px-8 py-3 rounded-full font-light hidden md:block">
+              className="bg-primary text-accent hover:bg-accent hover:text-primary px-8 py-3 rounded-full font-light hidden md:block transition duration-200">
               Join Us
             </button>
           </div>
@@ -178,19 +178,29 @@ const Navbar = () => {
           </div>
           <ul className="flex flex-col items-center gap-3 mt-5 px-5 text-lg font-medium">
             <NavLink onClick={() => setShowMenu(false)} to="/">
-              <p className="px-4 py-2 rounded inline-block">Home</p>
+              <p className="px-4 py-2 rounded inline-block text-primary hover:text-accent transition">
+                HOME
+              </p>
             </NavLink>
             <NavLink onClick={() => setShowMenu(false)} to="/instructors">
-              <p className="px-4 py-2 rounded inline-block">ALL INSTRUCTORS</p>
+              <p className="px-4 py-2 rounded inline-block text-primary hover:text-accent transition">
+                ALL INSTRUCTORS
+              </p>
             </NavLink>
             <NavLink onClick={() => setShowMenu(false)} to="/about">
-              <p className="px-4 py-2 rounded inline-block">ABOUT CLUB</p>
+              <p className="px-4 py-2 rounded inline-block text-primary hover:text-accent transition">
+                ABOUT CLUB
+              </p>
             </NavLink>
             <NavLink onClick={() => setShowMenu(false)} to="/events">
-              <p className="px-4 py-2 rounded inline-block">EVENTS</p>
+              <p className="px-4 py-2 rounded inline-block text-primary hover:text-accent transition">
+                EVENTS
+              </p>
             </NavLink>
             <NavLink onClick={() => setShowMenu(false)} to="/gallery">
-              <p className="px-4 py-2 rounded inline-block">GALLERY</p>
+              <p className="px-4 py-2 rounded inline-block text-primary hover:text-accent transition">
+                GALLERY
+              </p>
             </NavLink>
           </ul>
         </div>

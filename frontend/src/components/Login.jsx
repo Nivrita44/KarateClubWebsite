@@ -3,16 +3,12 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,7 +26,6 @@ const Login = () => {
 
       if (response.ok) {
         alert("Login Successful!");
-        // Store the user data in localStorage (excluding password)
         localStorage.setItem("userId", data.user.id);
         localStorage.setItem("token", JSON.stringify(data.user));
         navigate("/");
@@ -38,7 +33,7 @@ const Login = () => {
       } else {
         setError(data.message || "Invalid email or password.");
       }
-    } catch (error) {
+    } catch {
       setError("Server error. Please try again later.");
     } finally {
       setLoading(false);
@@ -46,16 +41,17 @@ const Login = () => {
   };
 
   return (
-    <section className="flex items-center justify-center min-h-screen bg-gray-100">
+    <section className="flex items-center justify-center min-h-screen bg-background px-4">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+        <h2 className="text-3xl font-bold text-center text-primary mb-6">
           Welcome Back to SKC!
         </h2>
 
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+        {error && (
+          <p className="text-red-600 text-center font-medium mb-4">{error}</p>
+        )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Email Field */}
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block font-medium text-gray-700">Email</label>
             <input
@@ -63,12 +59,11 @@ const Login = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent transition"
               required
             />
           </div>
 
-          {/* Password Field */}
           <div>
             <label className="block font-medium text-gray-700">Password</label>
             <input
@@ -76,32 +71,28 @@ const Login = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent transition"
               required
             />
           </div>
 
-          {/* Submit Button */}
           <div className="text-center">
             <button
               type="submit"
-              className="w-full bg-red-800 text-white px-6 py-2 rounded-lg hover:bg-red-800 transition-all shadow-md"
               disabled={loading}
-            >
+              className="w-full bg-primary text-accent px-6 py-2 rounded-lg font-semibold hover:bg-accent hover:text-primary transition duration-200 shadow">
               {loading ? "Logging in..." : "Login"}
             </button>
           </div>
         </form>
 
-        {/* Admission Form Link */}
-        <div className="mt-4 text-center">
+        <div className="mt-5 text-center">
           <p className="text-gray-600">
             Not a member?{" "}
             <span
-              className="text-red-800 cursor-pointer hover:underline"
-              onClick={() => navigate("/join-us")}
-            >
-              Join Now
+              className="text-primary cursor-pointer hover:text-accent underline-offset-2 hover:underline"
+              onClick={() => navigate("/join-us")}>
+              Join
             </span>
           </p>
         </div>

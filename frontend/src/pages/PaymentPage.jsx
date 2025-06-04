@@ -16,6 +16,12 @@ const PaymentPage = () => {
 
   // Fetch student data when studentID changes
   useEffect(() => {
+    if (student) {
+      console.log("✅ Student data updated:", student);
+    }
+  }, [student]);
+  
+  useEffect(() => {
     const fetchStudentData = async () => {
       try {
         const response = await axios.get(
@@ -23,8 +29,8 @@ const PaymentPage = () => {
         );
     
         console.log("📥 Student data fetched:", response.data); // Debugging log
-        setStudent(response.data[0]); // Set student data from the response
-        console.log("Student data:", student); // Debugging log
+        setStudent(response.data); // Set student data from the response
+        console.log("Student data:", response.data); // Debugging log
       } catch (error) {
         console.error("❌ Error fetching student data:", error);
         setError("Failed to fetch student data. Please try again later.");
