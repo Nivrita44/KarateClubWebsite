@@ -74,11 +74,12 @@ const AdminExamForm = () => {
           className="w-full border p-2 rounded"
           required
         />
-        <button
-          type="submit"
-          className="bg-red-800 text-white px-4 py-2 rounded">
-          Save Exam
-        </button>
+       <button
+  type="submit"
+  className="bg-black text-[#F3E8A8] px-4 py-2 rounded hover:opacity-90 transition">
+  Save Exam
+</button>
+
       </form>
     </div>
   );

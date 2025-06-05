@@ -48,8 +48,6 @@ export default function Announcements() {
       alert("Failed to post announcement");
     }
   };
-  
-  
 
   const handleEdit = (announcement) => {
     setForm({ title: announcement.title, content: announcement.content });
@@ -62,18 +60,20 @@ export default function Announcements() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Manage Announcements</h1>
+    <div className="max-w-4xl mx-auto p-6" style={{ backgroundColor: "#E8E3DD" }}>
+      <h1 className="text-2xl font-bold mb-4 text-black border-b border-black pb-2">
+        Manage Announcements
+      </h1>
 
-      <div className="space-y-4 mb-6">
+      <div className="space-y-4 mb-6 bg-white p-4 rounded shadow">
         <input
-          className="w-full border p-2 rounded"
+          className="w-full border p-2 rounded text-sm"
           placeholder="Title"
           value={form.title}
           onChange={(e) => setForm({ ...form, title: e.target.value })}
         />
         <textarea
-          className="w-full border p-2 rounded"
+          className="w-full border p-2 rounded text-sm"
           placeholder="Content"
           rows={4}
           value={form.content}
@@ -82,36 +82,39 @@ export default function Announcements() {
         <input
           type="file"
           accept="image/*,application/pdf"
-          className="w-full border p-2 rounded"
+          className="w-full border p-2 rounded text-sm"
           onChange={(e) => setForm({ ...form, file: e.target.files[0] })}
         />
         <button
           onClick={handleSubmit}
-          className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-700">
+          className="bg-black text-[#F3E8A8] px-4 py-2 rounded hover:opacity-90 transition text-sm"
+        >
           {editingId ? "Update Announcement" : "Post Announcement"}
         </button>
       </div>
 
-      <ul className="divide-y">
+      <ul className="divide-y bg-white p-4 rounded shadow">
         {announcements.map((a) => (
           <li key={a.id} className="py-3">
             <div className="flex justify-between">
               <div>
-                <h3 className="font-semibold text-lg">{a.title}</h3>
-                <p className="text-gray-700">{a.content}</p>
-                <p className="text-xs text-gray-400">
+                <h3 className="font-semibold text-lg text-black">{a.title}</h3>
+                <p className="text-gray-800 text-sm">{a.content}</p>
+                <p className="text-xs text-gray-500">
                   {new Date(a.createdAt).toLocaleString()}
                 </p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 text-sm">
                 <button
                   onClick={() => handleEdit(a)}
-                  className="text-red-600 hover:underline">
+                  className="text-black underline hover:opacity-70"
+                >
                   Edit
                 </button>
                 <button
                   onClick={() => handleDelete(a.id)}
-                  className="text-red-800 hover:underline">
+                  className="text-black underline hover:opacity-70"
+                >
                   Delete
                 </button>
               </div>

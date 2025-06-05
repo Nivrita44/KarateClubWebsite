@@ -49,70 +49,32 @@ export default function ClassRoutine() {
   return (
     <div className="min-h-screen flex bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-lg">
+      <aside className="w-64 bg-white shadow-md">
         <div className="p-6">
-          <h2 className="text-2xl font-bold text-red-600">Karate Academy</h2>
+          <h2 className="text-2xl font-extrabold text-primary">
+            Karate SUST
+          </h2>
         </div>
         <nav className="flex flex-col space-y-2 px-4">
-          <Link
-            to="/my-profile"
-            className={`flex items-center space-x-2 p-3 rounded-md ${
-              isActive("/profile")
-                ? "bg-red-600 text-white"
-                : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            <User className="w-5 h-5" />
-            <span>My Profile</span>
-          </Link>
-
-          <Link
-            to="/notifications"
-            className={`flex items-center space-x-2 p-3 rounded-md ${
-              isActive("/notifications")
-                ? "bg-red-600 text-white"
-                : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            <Bell className="w-5 h-5" />
-            <span>Notifications</span>
-          </Link>
-
-          <Link
-            to="/class-routine"
-            className={`flex items-center space-x-2 p-3 rounded-md ${
-              isActive("/class-routine")
-                ? "bg-red-600 text-white"
-                : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            <Calendar className="w-5 h-5" />
-            <span>Class Routine</span>
-          </Link>
-
-          <Link
-            to="/exam-routine"
-            className={`flex items-center space-x-2 p-3 rounded-md ${
-              isActive("/exam-routine")
-                ? "bg-red-600 text-white"
-                : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            <Book className="w-5 h-5" />
-            <span>Exam Routine</span>
-          </Link>
-
-          <Link
-            to="/belt-info"
-            className={`flex items-center space-x-2 p-3 rounded-md ${
-              isActive("/belt-info")
-                ? "bg-red-600 text-white"
-                : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            <Medal className="w-5 h-5" />
-            <span>Belt Info</span>
-          </Link>
+          {[
+            { path: "/my-profile", label: "My Profile", icon: User },
+            { path: "/notifications", label: "Notifications", icon: Bell },
+            { path: "/class-routine", label: "Class Routine", icon: Calendar },
+            { path: "/exam-routine", label: "Exam Routine", icon: Book },
+            { path: "/belt-info", label: "Belt Info", icon: Medal },
+          ].map(({ path, label, icon: Icon }) => (
+            <Link
+              key={path}
+              to={path}
+              className={`flex items-center gap-2 p-3 rounded-md transition ${
+                isActive(path)
+                  ? "bg-primary text-accent"
+                  : "text-gray-700 hover:bg-gray-200"
+              }`}>
+              <Icon className="w-5 h-5" />
+              <span className="text-sm font-medium">{label}</span>
+            </Link>
+          ))}
         </nav>
       </aside>
 

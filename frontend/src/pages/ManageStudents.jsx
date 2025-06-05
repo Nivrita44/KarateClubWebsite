@@ -113,8 +113,11 @@ const ManageStudents = () => {
     return <div className="p-10 text-center">Loading students...</div>;
 
   return (
-    <div className="max-w-7xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Manage Students</h1>
+    <div className="p-6" style={{ backgroundColor: "#E8E3DD" }}>
+      <h1 className="text-2xl font-bold mb-4 text-black border-b border-black pb-2">
+        Manage Students
+      </h1>
+
       {toast && (
         <div className="bg-green-100 text-green-800 py-2 px-4 mb-4 rounded">
           {toast}
@@ -122,18 +125,19 @@ const ManageStudents = () => {
       )}
 
       {/* Search & Bulk Actions */}
-      <div className="flex flex-wrap items-center gap-4 mb-4">
+      <div className="flex flex-wrap items-center gap-2 mb-4">
         <input
           type="text"
           placeholder="Search by name or email"
-          className="border px-3 py-2 rounded w-full md:w-1/3"
+          className="border px-3 py-1 rounded text-sm font-medium"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <select
           value={bulkBelt}
           onChange={(e) => setBulkBelt(e.target.value)}
-          className="border px-3 py-2 rounded">
+          className="border px-2 py-1 rounded text-sm font-medium"
+        >
           <option value="">Assign belt to selected</option>
           {beltOptions.map((belt) => (
             <option key={belt} value={belt}>
@@ -144,17 +148,18 @@ const ManageStudents = () => {
         <button
           onClick={handleBulkUpdate}
           disabled={!bulkBelt || selectedIds.length === 0}
-          className="bg-red-800 text-white px-4 py-2 rounded disabled:opacity-50">
+          className="bg-black text-[#F3E8A8] px-3 py-1 rounded text-sm font-medium disabled:opacity-50 hover:opacity-90 transition"
+        >
           Apply to {selectedIds.length} students
         </button>
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden text-sm">
-          <thead className="bg-red-100 text-red-700 text-left">
+      <div className="overflow-auto">
+        <table className="min-w-[600px] bg-white text-sm font-medium rounded border">
+          <thead style={{ backgroundColor: "#F3E8A8" }} className="text-black">
             <tr>
-              <th className="px-4 py-2">
+              <th className="px-3 py-2">
                 <input
                   type="checkbox"
                   checked={selectedIds.length === students.length}
@@ -165,46 +170,48 @@ const ManageStudents = () => {
                   }
                 />
               </th>
-              <th className="px-4 py-2">Photo</th>
-              <th className="px-4 py-2">Name</th>
-              <th className="px-4 py-2">Email</th>
-              <th className="px-4 py-2">Belt</th>
-              <th className="px-4 py-2">Certificate</th>
-              <th className="px-4 py-2">Action</th>
+              <th className="px-3 py-2">Photo</th>
+              <th className="px-3 py-2">Name</th>
+              <th className="px-3 py-2">Email</th>
+              <th className="px-3 py-2">Belt</th>
+              <th className="px-3 py-2">Certificate</th>
+              <th className="px-3 py-2">Action</th>
             </tr>
           </thead>
           <tbody>
             {filteredStudents.map((student) => (
               <tr key={student.id} className="border-t">
-                <td className="px-4 py-2">
+                <td className="px-3 py-2 text-center">
                   <input
                     type="checkbox"
                     checked={selectedIds.includes(student.id)}
                     onChange={() => toggleSelect(student.id)}
                   />
                 </td>
-                <td className="px-4 py-2">
+                <td className="px-3 py-2">
                   <img
                     src={student.imageUrl}
-                    className="w-10 h-10 rounded-full"
+                    className="w-8 h-8 rounded-full"
                     alt={student.name}
                   />
                 </td>
-                <td className="px-4 py-2 font-semibold">{student.name}</td>
-                <td className="px-4 py-2">{student.email}</td>
-                <td className="px-4 py-2">
+                <td className="px-3 py-2 font-medium">{student.name}</td>
+                <td className="px-3 py-2">{student.email}</td>
+                <td className="px-3 py-2">
                   <span
-                    className={`inline-block px-2 py-1 rounded text-xs font-semibold ${
+                    className={`inline-block px-2 py-0.5 rounded text-xs font-semibold mb-1 ${
                       beltColors[student.belt] || "bg-gray-100 text-gray-600"
-                    }`}>
+                    }`}
+                  >
                     {student.belt || "Unassigned"}
                   </span>
                   <select
-                    className="mt-1 block w-full border px-2 py-1 rounded"
+                    className="mt-1 block w-full border px-2 py-1 rounded text-sm font-medium"
                     value={student.belt || ""}
                     onChange={(e) =>
                       handleBeltChange(student.id, e.target.value)
-                    }>
+                    }
+                  >
                     <option value="">Change belt</option>
                     {beltOptions.map((belt) => (
                       <option key={belt} value={belt}>
@@ -213,13 +220,14 @@ const ManageStudents = () => {
                     ))}
                   </select>
                 </td>
-                <td className="px-4 py-2">
+                <td className="px-3 py-2">
                   {student.certificate ? (
                     <a
                       href={student.certificate}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 underline">
+                      className="text-black underline"
+                    >
                       View
                     </a>
                   ) : (
@@ -231,10 +239,11 @@ const ManageStudents = () => {
                     />
                   )}
                 </td>
-                <td className="px-4 py-2">
+                <td className="px-3 py-2">
                   <button
                     onClick={() => handleSave(student.id)}
-                    className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">
+                    className="bg-black text-[#F3E8A8] px-3 py-1 rounded text-sm font-medium hover:opacity-90 transition"
+                  >
                     Save
                   </button>
                 </td>

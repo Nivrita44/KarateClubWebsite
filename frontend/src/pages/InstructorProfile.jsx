@@ -90,116 +90,118 @@ const InstructorProfile = () => {
     return <div className="text-center py-10 text-red-600">Unauthorized</div>;
 
   return (
-    <section className="max-w-4xl mx-auto mt-12 bg-white shadow-lg rounded-xl p-8">
-      {toast && (
-        <div className="mb-4 text-center bg-green-100 text-green-700 py-2 px-4 rounded shadow">
-          {toast}
-        </div>
-      )}
+    <section className="max-w-4xl mx-auto mt-12 bg-background shadow-lg rounded-xl p-8 font-formal text-primary">
+  {toast && (
+    <div className="mb-4 text-center bg-green-100 text-green-700 py-2 px-4 rounded shadow">
+      {toast}
+    </div>
+  )}
 
-      <div className="flex flex-col items-center gap-4">
-        <img
-          src={preview}
-          alt="Profile"
-          className="w-36 h-36 rounded-full border-4 border-red-500 shadow-lg"
-        />
-        {isEdit && (
+  <div className="flex flex-col items-center gap-4">
+    <img
+      src={preview}
+      alt="Profile"
+      className="w-36 h-36 rounded-full border-4 border-accent shadow-lg"
+    />
+    {isEdit && (
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleImageChange}
+        className="text-sm mt-2"
+      />
+    )}
+    <h1 className="text-3xl font-semibold">{instructor.name}</h1>
+    <p className="text-primary font-semibold">{instructor.position}</p>
+  </div>
+
+  <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
+    {[
+      { label: "Email", name: "email" },
+      { label: "Phone", name: "phone" },
+      { label: "Study Background", name: "studyBackground" },
+      { label: "Achievements", name: "achievements" },
+      { label: "Serving Period", name: "servingPeriod" },
+    ].map(({ label, name }) => (
+      <div key={name}>
+        <label className="block text-sm font-medium text-primary">{label}</label>
+        {isEdit ? (
           <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="text-sm mt-2"
+            type="text"
+            name={name}
+            value={instructor[name] || ""}
+            onChange={handleChange}
+            className="w-full mt-1 border border-accent bg-white rounded-lg px-4 py-2 text-primary shadow-sm focus:outline-none focus:ring-2 focus:ring-accent"
           />
-        )}
-        <h1 className="text-3xl font-semibold text-gray-800">{instructor.name}</h1>
-        <p className="text-gray-600 font-semibold">{instructor.position}</p>
-      </div>
-
-      <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {[
-          { label: "Email", name: "email" },
-          { label: "Phone", name: "phone" },
-          { label: "Study Background", name: "studyBackground" },
-          { label: "Achievements", name: "achievements" },
-          { label: "Serving Period", name: "servingPeriod" },
-        ].map(({ label, name }) => (
-          <div key={name}>
-            <label className="block text-sm font-medium text-gray-500">{label}</label>
-            {isEdit ? (
-              <input
-                type="text"
-                name={name}
-                value={instructor[name] || ""}
-                onChange={handleChange}
-                className="w-full mt-1 border rounded-lg px-4 py-2 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-            ) : (
-              <p className="mt-1 text-gray-800">{instructor[name] || "—"}</p>
-            )}
-          </div>
-        ))}
-
-        <div>
-          <label className="block text-sm font-medium text-gray-500">Belt</label>
-          {isEdit ? (
-            <select
-              name="belt"
-              value={instructor.belt || ""}
-              onChange={handleChange}
-              className="w-full mt-1 border rounded-lg px-4 py-2 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300">
-              <option value="">Select Belt</option>
-              {beltOptions.map((belt) => (
-                <option key={belt} value={belt}>
-                  {belt}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <p className="mt-1 text-gray-800">{instructor.belt || "—"}</p>
-          )}
-        </div>
-         <div className="flex justify-center mt-4">
-            <button
-               className="bg-red-800 text-white px-5 py-2 rounded-lg hover:bg-red-700 transition"
-               onClick={() => setIsEdit(!isEdit)}>
-               {isEdit ? "Cancel" : "Edit Profile"}
-            </button>
-         </div>
-
-        {isEdit && (
-          <>
-            <div>
-              <label className="block text-sm font-medium text-gray-500">New Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full mt-1 border rounded-lg px-4 py-2 text-gray-700 shadow-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-500">Confirm Password</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full mt-1 border rounded-lg px-4 py-2 text-gray-700 shadow-sm"
-              />
-            </div>
-          </>
+        ) : (
+          <p className="mt-1">{instructor[name] || "—"}</p>
         )}
       </div>
+    ))}
 
-      {isEdit && (
-        <div className="mt-8 text-center">
-          <button
-            onClick={handleSave}
-            className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition">
-            Save Changes
-          </button>
-        </div>
+    <div>
+      <label className="block text-sm font-medium text-primary">Belt</label>
+      {isEdit ? (
+        <select
+          name="belt"
+          value={instructor.belt || ""}
+          onChange={handleChange}
+          className="w-full mt-1 border border-accent bg-white rounded-lg px-4 py-2 text-primary shadow-sm focus:outline-none focus:ring-2 focus:ring-accent">
+          <option value="">Select Belt</option>
+          {beltOptions.map((belt) => (
+            <option key={belt} value={belt}>
+              {belt}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <p className="mt-1">{instructor.belt || "—"}</p>
       )}
-    </section>
+    </div>
+
+    <div className="flex justify-center mt-4">
+      <button
+        className="bg-accent text-primary px-5 py-2 rounded-lg hover:brightness-110 transition"
+        onClick={() => setIsEdit(!isEdit)}>
+        {isEdit ? "Cancel" : "Edit Profile"}
+      </button>
+    </div>
+
+    {isEdit && (
+      <>
+        <div>
+          <label className="block text-sm font-medium text-primary">New Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full mt-1 border border-accent rounded-lg px-4 py-2 text-primary shadow-sm"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-primary">Confirm Password</label>
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full mt-1 border border-accent rounded-lg px-4 py-2 text-primary shadow-sm"
+          />
+        </div>
+      </>
+    )}
+  </div>
+
+  {isEdit && (
+    <div className="mt-8 text-center">
+      <button
+        onClick={handleSave}
+        className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition">
+        Save Changes
+      </button>
+    </div>
+  )}
+</section>
+
   );
 };
 

@@ -95,7 +95,8 @@ export default function Profile() {
                 isActive(path)
                   ? "bg-primary text-accent"
                   : "text-gray-700 hover:bg-gray-200"
-              }`}>
+              }`}
+            >
               <Icon className="w-5 h-5" />
               <span className="text-sm font-medium">{label}</span>
             </Link>
@@ -111,22 +112,30 @@ export default function Profile() {
             <img
               src={userData.imageUrl || assets.profile_pic}
               alt="Profile"
-              className="w-32 h-32 rounded-full border-4 border-white shadow-md"
+              className="w-36 h-36 rounded-full border-4 border-white shadow-md"
             />
-            <label className="mt-2 text-sm text-blue-600 cursor-pointer hover:underline">
-              Change Profile Picture
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
-            </label>
+            {isEdit && (
+              <label className="mt-2 text-sm text-blue-600 cursor-pointer hover:underline">
+                Change Profile Picture
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+              </label>
+            )}
           </div>
         </div>
 
         {/* Info */}
-        <div className="bg-white rounded-b-2xl pt-36 pb-12 px-6 shadow text-center">
+        <div className="bg-white rounded-b-2xl pt-20 pb-12 px-6 shadow text-center">
+          {isEdit && (
+            <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-md text-gray-700 text-sm">
+              ✏️ You can now update your profile information including your email, phone number, or profile picture.
+            </div>
+          )}
+
           <h1 className="text-3xl font-bold text-gray-800 mb-10">
             {userData.name}
           </h1>
@@ -179,19 +188,22 @@ export default function Profile() {
               <>
                 <button
                   className="px-6 py-2 bg-primary text-accent rounded-md shadow hover:bg-accent hover:text-primary transition"
-                  onClick={handleSave}>
+                  onClick={handleSave}
+                >
                   Save
                 </button>
                 <button
                   className="px-6 py-2 bg-gray-300 text-gray-800 rounded-md shadow hover:bg-gray-400"
-                  onClick={() => setIsEdit(false)}>
+                  onClick={() => setIsEdit(false)}
+                >
                   Cancel
                 </button>
               </>
             ) : (
               <button
                 className="px-6 py-2 border border-primary text-primary rounded-md shadow-sm hover:bg-primary hover:text-accent transition"
-                onClick={() => setIsEdit(true)}>
+                onClick={() => setIsEdit(true)}
+              >
                 Edit Profile
               </button>
             )}

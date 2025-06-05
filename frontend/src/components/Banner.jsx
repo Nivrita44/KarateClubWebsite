@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 
@@ -15,23 +14,23 @@ const Banner = () => {
 
         {/* Buttons */}
         <div className="mt-6 flex flex-wrap gap-4">
-          <button
-            onClick={() => {
-              navigate("/join-us");
-              scrollTo(0, 0);
-            }}
-            className="bg-accent text-primary text-sm sm:text-base px-6 py-3 rounded-full font-medium hover:bg-primary hover:text-accent transition-all">
-            Register Now
-          </button>
+         <button
+    onClick={() => {
+      navigate("/join-us");
+      scrollTo(0, 0);
+    }}
+    className="bg-accent text-primary text-sm sm:text-base px-6 py-3 rounded-full font-medium transition-all hover:brightness-110">
+    Register Now
+  </button>
 
-          <button
-            onClick={() => {
-              navigate("/login");
-              scrollTo(0, 0);
-            }}
-            className="border border-accent text-accent text-sm sm:text-base px-6 py-3 rounded-full font-medium hover:bg-accent hover:text-primary transition-all">
-            Login
-          </button>
+  <button
+    onClick={() => {
+      navigate("/login");
+      scrollTo(0, 0);
+    }}
+    className="bg-accent text-primary text-sm sm:text-base px-6 py-3 rounded-full font-medium transition-all hover:brightness-110">
+    Login
+  </button>
         </div>
       </div>
 

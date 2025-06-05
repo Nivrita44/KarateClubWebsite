@@ -1,7 +1,3 @@
-import event1 from "../assets/event1.jpg";
-// import event2 from "../assets/event2.jpg";
-// import event3 from "../assets/event3.jpg";
-
 const upcomingEvents = [
   {
     id: 1,
@@ -9,8 +5,7 @@ const upcomingEvents = [
     description:
       "1st Shahjalal University of Science and Technology, Sylhet Inter Karate Tournament will be held on December 2022.",
         date: { day: "1", month: "Dec", year: "2022" },
-    image:
-      event1,
+    
   },
   {
     id: 2,

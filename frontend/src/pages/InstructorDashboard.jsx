@@ -11,7 +11,6 @@ import {
 import { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 
-
 const InstructorDashboard = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -20,7 +19,7 @@ const InstructorDashboard = () => {
   }, []);
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-background font-formal text-primary">
       {/* Sidebar */}
       <aside
         className={`bg-white shadow-lg transition-all duration-300 ${
@@ -29,82 +28,38 @@ const InstructorDashboard = () => {
         <div className="p-4 space-y-4">
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="text-gray-500 hover:text-red-600 mb-6"
+            className="text-primary hover:text-accent mb-6"
             title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}>
             {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
           </button>
 
-          <nav className="flex flex-col gap-3 text-sm font-medium text-gray-700">
-            <NavLink
-              to="profile"
-              className={({ isActive }) =>
-                `flex items-center gap-2 p-2 rounded hover:bg-gray-100 ${
-                  isActive ? "bg-red-100 text-red-600" : ""
-                }`
-              }>
-              <User />
-              {!isCollapsed && <span>My Profile</span>}
-            </NavLink>
-
-            <NavLink
-              to="students"
-              className={({ isActive }) =>
-                `flex items-center gap-2 p-2 rounded hover:bg-gray-100 ${
-                  isActive ? "bg-red-100 text-red-600" : ""
-                }`
-              }>
-              <Users />
-              {!isCollapsed && <span>Manage Students</span>}
-            </NavLink>
-
-            <NavLink
-              to="notifications"
-              className={({ isActive }) =>
-                `flex items-center gap-2 p-2 rounded hover:bg-gray-100 ${
-                  isActive ? "bg-red-100 text-red-600" : ""
-                }`
-              }>
-              <Bell />
-              {!isCollapsed && <span>Notifications</span>}
-            </NavLink>
-
-            <NavLink
-              to="announcements"
-              className={({ isActive }) =>
-                `flex items-center gap-2 p-2 rounded hover:bg-gray-100 ${
-                  isActive ? "bg-red-100 text-red-600" : ""
-                }`
-              }>
-              <Megaphone />
-              {!isCollapsed && <span>Announcements</span>}
-            </NavLink>
-            <NavLink
-              to="exams"
-              className={({ isActive }) =>
-                `flex items-center gap-2 p-2 rounded hover:bg-gray-100 ${
-                  isActive ? "bg-red-100 text-red-600" : ""
-                }`
-              }>
-              <Book />
-              {!isCollapsed && <span>Manage Exams</span>}
-            </NavLink>
-
-            <NavLink
-              to="about"
-              className={({ isActive }) =>
-                `flex items-center gap-2 p-2 rounded hover:bg-gray-100 ${
-                  isActive ? "bg-red-100 text-red-600" : ""
-                }`
-              }>
-              <Info />
-              {!isCollapsed && <span>Edit About Club</span>}
-            </NavLink>
+          <nav className="flex flex-col gap-3 text-[16px] font-medium text-primary">
+            {[
+              { to: "profile", label: "My Profile", icon: <User /> },
+              { to: "students", label: "Manage Students", icon: <Users /> },
+              { to: "notifications", label: "Notifications", icon: <Bell /> },
+              { to: "announcements", label: "Announcements", icon: <Megaphone /> },
+              { to: "exams", label: "Manage Exams", icon: <Book /> },
+              { to: "about", label: "Edit About Club", icon: <Info /> },
+            ].map(({ to, label, icon }) => (
+              <NavLink
+                key={to}
+                to={to}
+                className={({ isActive }) =>
+                  `flex items-center gap-2 p-2 rounded transition-all hover:bg-accent hover:text-primary ${
+                    isActive ? "bg-accent text-primary font-semibold" : ""
+                  }`
+                }>
+                {icon}
+                {!isCollapsed && <span>{label}</span>}
+              </NavLink>
+            ))}
           </nav>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6 overflow-y-auto">
+      <main className="flex-1 p-6 overflow-y-auto bg-background">
         <Outlet />
       </main>
     </div>

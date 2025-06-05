@@ -2,7 +2,7 @@ import img1 from "../assets/img1.jpg";
 
 const ChooseUs = () => {
   return (
-    <section className="flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-12 bg-background">
+    <section className="mt-10 flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-12 bg-background">
       {/* Left Column */}
       <div className="w-full md:w-1/2">
         <h2 className="text-4xl font-bold mb-8 text-primary">Why Choose Us</h2>

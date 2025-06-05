@@ -54,7 +54,7 @@ const EditAboutClub = () => {
       <button
         onClick={handleSave}
         disabled={saving}
-        className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-700">
+        className="bg-black text-[#F3E8A8] px-4 py-2 rounded hover:opacity-90 transition">
         {saving ? "Saving..." : "Save Changes"}
       </button>
     </div>
