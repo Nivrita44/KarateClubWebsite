@@ -804,6 +804,19 @@ app.put("/api/about", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+const handleSave = async () => {
+  console.log(content); // Check content data structure before sending
+  setSaving(true);
+  try {
+    await axios.put("http://localhost:4000/api/about", content);
+    alert("About Club content updated.");
+  } catch (error) {
+    alert("Failed to update.");
+    console.error("Error updating content:", error);
+  }
+  setSaving(false);
+};
+
 
 // Get student belt info
 app.get("/api/student/:id/belt-info", async (req, res) => {

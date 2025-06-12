@@ -100,7 +100,7 @@ const JoinUs = () => {
               value={formData.guardian}
               onChange={handleChange}
               className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
-              required
+              // required
             />
           </div>
         </div>
@@ -115,7 +115,7 @@ const JoinUs = () => {
               value={formData.relation}
               onChange={handleChange}
               className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-accent"
-              required
+              // required
             />
           </div>
           <div>

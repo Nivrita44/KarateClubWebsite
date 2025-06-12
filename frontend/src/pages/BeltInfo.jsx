@@ -28,6 +28,28 @@ export default function BeltInfo() {
     "Black Belt",
   ];
 
+  const beltColors = {
+    "White Belt": "bg-gray-200 text-gray-600",
+    "Yellow Belt": "bg-yellow-400 text-yellow-900",
+    "Orange Belt": "bg-orange-400 text-white",
+    "Green Belt": "bg-green-500 text-white",
+    "Blue Belt": "bg-blue-400 text-white",
+    "Purple Belt": "bg-purple-400 text-white",
+    "Brown Belt": "bg-amber-600 text-white",
+    "Black Belt": "bg-black text-white",
+  };
+
+  const beltImages = {
+    "White Belt": "/images/white-belt.png",
+    "Yellow Belt": "/images/yellow-belt.png",
+    "Orange Belt": "/images/orange-belt.png",
+    "Green Belt": "/images/green-belt.png",
+    "Blue Belt": "/images/blue-belt.png",
+    "Purple Belt": "/images/purple-belt.png",
+    "Brown Belt": "/images/brown-belt.png",
+    "Black Belt": "/images/black-belt.png",
+  };
+
   useEffect(() => {
     if (userId) {
       axios
@@ -65,11 +87,9 @@ export default function BeltInfo() {
   return (
     <div className="min-h-screen flex bg-gray-100">
       {/* Sidebar */}
-     <aside className="w-64 bg-white shadow-md">
+      <aside className="w-64 bg-white shadow-md">
         <div className="p-6">
-          <h2 className="text-2xl font-extrabold text-primary">
-            Karate SUST
-          </h2>
+          <h2 className="text-2xl font-extrabold text-primary">Karate SUST</h2>
         </div>
         <nav className="flex flex-col space-y-2 px-4">
           {[
@@ -103,9 +123,7 @@ export default function BeltInfo() {
           <div className="bg-white shadow rounded-xl p-6">
             <div className="text-center">
               <img
-                src={`/badges/${beltInfo.belt
-                  ?.toLowerCase()
-                  .replace(" ", "-")}.png`}
+                src={beltImages[beltInfo.belt] || "/images/default-belt.png"}
                 alt={beltInfo.belt}
                 className="w-24 h-24 mx-auto rounded-full object-cover shadow"
               />
@@ -120,7 +138,9 @@ export default function BeltInfo() {
                 <p className="text-gray-600">Progress to next belt</p>
                 <div className="w-full bg-gray-200 rounded-full h-2.5">
                   <div
-                    className="bg-green-600 h-2.5 rounded-full"
+                    className={`h-2.5 rounded-full ${
+                      beltColors[beltInfo.belt] || "bg-gray-600"
+                    }`}
                     style={{ width: `${progress}%` }}
                   />
                 </div>
@@ -221,4 +241,4 @@ export default function BeltInfo() {
       </main>
     </div>
   );
-}
+  }

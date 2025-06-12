@@ -91,117 +91,131 @@ const InstructorProfile = () => {
 
   return (
     <section className="max-w-4xl mx-auto mt-12 bg-background shadow-lg rounded-xl p-8 font-formal text-primary">
-  {toast && (
-    <div className="mb-4 text-center bg-green-100 text-green-700 py-2 px-4 rounded shadow">
-      {toast}
-    </div>
-  )}
-
-  <div className="flex flex-col items-center gap-4">
-    <img
-      src={preview}
-      alt="Profile"
-      className="w-36 h-36 rounded-full border-4 border-accent shadow-lg"
-    />
-    {isEdit && (
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleImageChange}
-        className="text-sm mt-2"
-      />
-    )}
-    <h1 className="text-3xl font-semibold">{instructor.name}</h1>
-    <p className="text-primary font-semibold">{instructor.position}</p>
-  </div>
-
-  <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
-    {[
-      { label: "Email", name: "email" },
-      { label: "Phone", name: "phone" },
-      { label: "Study Background", name: "studyBackground" },
-      { label: "Achievements", name: "achievements" },
-      { label: "Serving Period", name: "servingPeriod" },
-    ].map(({ label, name }) => (
-      <div key={name}>
-        <label className="block text-sm font-medium text-primary">{label}</label>
-        {isEdit ? (
-          <input
-            type="text"
-            name={name}
-            value={instructor[name] || ""}
-            onChange={handleChange}
-            className="w-full mt-1 border border-accent bg-white rounded-lg px-4 py-2 text-primary shadow-sm focus:outline-none focus:ring-2 focus:ring-accent"
-          />
-        ) : (
-          <p className="mt-1">{instructor[name] || "—"}</p>
-        )}
-      </div>
-    ))}
-
-    <div>
-      <label className="block text-sm font-medium text-primary">Belt</label>
-      {isEdit ? (
-        <select
-          name="belt"
-          value={instructor.belt || ""}
-          onChange={handleChange}
-          className="w-full mt-1 border border-accent bg-white rounded-lg px-4 py-2 text-primary shadow-sm focus:outline-none focus:ring-2 focus:ring-accent">
-          <option value="">Select Belt</option>
-          {beltOptions.map((belt) => (
-            <option key={belt} value={belt}>
-              {belt}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <p className="mt-1">{instructor.belt || "—"}</p>
+      {toast && (
+        <div className="mb-4 text-center bg-green-100 text-green-700 py-2 px-4 rounded shadow">
+          {toast}
+        </div>
       )}
-    </div>
 
-    <div className="flex justify-center mt-4">
-      <button
-        className="bg-accent text-primary px-5 py-2 rounded-lg hover:brightness-110 transition"
-        onClick={() => setIsEdit(!isEdit)}>
-        {isEdit ? "Cancel" : "Edit Profile"}
-      </button>
-    </div>
-
-    {isEdit && (
-      <>
-        <div>
-          <label className="block text-sm font-medium text-primary">New Password</label>
+      <div className="flex flex-col items-center gap-4">
+        <img
+          src={preview}
+          alt="Profile"
+          className="w-36 h-36 rounded-full border-4 border-accent shadow-lg"
+        />
+        {isEdit && (
           <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full mt-1 border border-accent rounded-lg px-4 py-2 text-primary shadow-sm"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="text-sm mt-2"
           />
-        </div>
+        )}
+        <h1 className="text-3xl font-semibold">{instructor.name}</h1>
+        <p className="text-primary font-semibold">{instructor.position}</p>
+      </div>
+
+      <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {[
+          { label: "Email", name: "email" },
+          { label: "Phone", name: "phone" },
+          { label: "Study Background", name: "studyBackground" },
+          { label: "Achievements", name: "achievements" },
+          { label: "Serving Period", name: "servingPeriod" },
+        ].map(({ label, name }) => (
+          <div key={name}>
+            <label className="block text-sm font-medium text-primary">
+              {label}
+            </label>
+            {isEdit ? (
+              <input
+                type="text"
+                name={name}
+                value={instructor[name] || ""}
+                onChange={handleChange}
+                className="w-full mt-1 border border-accent bg-white rounded-lg px-4 py-2 text-primary shadow-sm focus:outline-none focus:ring-2 focus:ring-accent"
+              />
+            ) : (
+              <p className="mt-1">{instructor[name] || "—"}</p>
+            )}
+          </div>
+        ))}
+
         <div>
-          <label className="block text-sm font-medium text-primary">Confirm Password</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full mt-1 border border-accent rounded-lg px-4 py-2 text-primary shadow-sm"
-          />
+          <label className="block text-sm font-medium text-primary">Belt</label>
+          {isEdit ? (
+            <select
+              name="belt"
+              value={instructor.belt || ""}
+              onChange={handleChange}
+              className="w-full mt-1 border border-accent bg-white rounded-lg px-4 py-2 text-primary shadow-sm focus:outline-none focus:ring-2 focus:ring-accent">
+              <option value="">Select Belt</option>
+              {beltOptions.map((belt) => (
+                <option key={belt} value={belt}>
+                  {belt}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <p className="mt-1">{instructor.belt || "—"}</p>
+          )}
         </div>
-      </>
-    )}
-  </div>
+      </div>
 
-  {isEdit && (
-    <div className="mt-8 text-center">
-      <button
-        onClick={handleSave}
-        className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition">
-        Save Changes
-      </button>
-    </div>
-  )}
-</section>
+      {isEdit && (
+        <>
+          <div>
+            <label className="block text-sm font-medium text-primary">
+              New Password
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full mt-1 border border-accent rounded-lg px-4 py-2 text-primary shadow-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-primary">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full mt-1 border border-accent rounded-lg px-4 py-2 text-primary shadow-sm"
+            />
+          </div>
 
+          <div className="flex justify-center gap-4 mt-6">
+            <div className="w-full sm:w-1/2 text-center">
+              <button
+                className="w-full px-6 py-2 bg-green-600 text-white rounded-md shadow-lg hover:bg-green-700 transition"
+                onClick={handleSave}>
+                Save Changes
+              </button>
+            </div>
+            <div className="w-full sm:w-1/2 text-center">
+              <button
+                className="w-full px-6 py-2 bg-gray-300 text-gray-800 rounded-md shadow-lg hover:bg-gray-400 transition"
+                onClick={() => setIsEdit(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
+      {!isEdit && (
+        <div className="w-full text-center mt-4">
+          <button
+            className="w-full px-6 py-2 border border-primary text-primary rounded-md shadow-lg hover:bg-primary hover:text-accent transition"
+            onClick={() => setIsEdit(true)}>
+            Edit Profile
+          </button>
+        </div>
+      )}
+    </section>
   );
 };
 
