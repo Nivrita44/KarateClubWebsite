@@ -1,4 +1,3 @@
-import React from "react";
 import { assets } from "../assets/assets";
 
 const Footer = () => {
@@ -9,10 +8,9 @@ const Footer = () => {
         <div>
           <img className="mb-5 w-40" src={assets.logo} alt="" />
           <p className="w-full md:w-2/3 text-gray-600 leading-6">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit
-            ducimus, beatae molestias optio nobis temporibus nesciunt
-            voluptatibus! Deserunt qui tenetur animi iusto repudiandae velit
-            quis, non modi neque quas assumenda.
+            <p>© 2025 SUST Karate Club</p>
+            Empowering minds and bodies at Shahjalal University of Science and Technology.
+            Train with discipline. Rise with honor.
           </p>
         </div>
 
@@ -31,7 +29,7 @@ const Footer = () => {
           <p className="text-xl font-medium mb-5">GET IN TOUCH</p>
           <ul className="flex flex-col gap-2 text-gray-600">
             <li>+08812345677</li>
-            <li>abc@gmail.com</li>
+            <li>sustkarateclub@gmail.com</li>
           </ul>
         </div>
       </div>

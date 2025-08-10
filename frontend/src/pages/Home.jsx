@@ -1,18 +1,20 @@
-import React from "react";
-import About from "../components/About";
-import Banner from "../components/Banner";
 import Header from "../components/Header";
+import Position from "../components/Position";
+import About from "../components/About";
+import ChooseUs from "../components/ChooseUs";
 import Instructors from "../components/Instructors";
-import Speciality from "../components/Speciality";
+import Banner from "../components/Banner";
+
 const Home = () => {
   return (
-    <div>
+    <main className="px-6 md:px-12">
       <Header />
-      <Speciality />
+      <Position />
       <About />
+      <ChooseUs />
       <Instructors />
       <Banner />
-    </div>
+    </main>
   );
 };
 
