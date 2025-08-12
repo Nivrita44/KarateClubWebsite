@@ -1,18 +1,24 @@
-import React from "react";
+import img1 from "../assets/img1.jpg";
+import img2 from "../assets/img2.jpg";
+import img3 from "../assets/img3.jpg";
+import img4 from "../assets/img4.jpg";
+import img5 from "../assets/img5.jpg";
+import img6 from "../assets/img6.jpg";
+import img7 from "../assets/img7.jpg";
+import img8 from "../assets/img8.jpg";
+import karate1 from "../assets/karate1.jpg";
+import karate2 from "../assets/karate2.jpg";
+
 
 const Gallery = () => {
+  const images = [img1, img2, img3, img4,img5,img6,img7,img8,karate1,karate2];
+
   return (
     <section id="gallery" className="py-12 bg-white">
       <div className="container mx-auto px-6">
         <h2 className="text-3xl font-bold text-center mb-8">Achievements Gallery</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {/* Gallery Images */}
-          {[
-            "https://clubs.daffodilvarsity.edu.bd/gallery/photos/289ea30aa7d95902406cfe1ee5d46dcb.png",
-            "https://clubs.daffodilvarsity.edu.bd/gallery/photos/cd29db27eb8732a356d23b14e5c8ddce.png",
-            "https://clubs.daffodilvarsity.edu.bd/gallery/photos/0b03e2490d45f23274ecaaf08a1476b9.png",
-            "https://clubs.daffodilvarsity.edu.bd/gallery/photos/ea8495cd5f240303e8c9fe7c1384c160.png",
-          ].map((image, index) => (
+          {images.map((image, index) => (
             <div key={index} className="relative group">
               <a href={image} target="_blank" rel="noopener noreferrer">
                 <img
