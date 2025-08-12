@@ -5,6 +5,7 @@ import express from "express";
 import mysql from "mysql2";
 import multer from "multer";
 
+
 import SSLCommerzPayment from "sslcommerz-lts";
 import { cloudinary, cloudinaryConfig } from "./config/cloudinaryConfig.js"; // Cloudinary configuration
 import db from "./config/mysql.js";
@@ -18,9 +19,15 @@ const app = express();
 const port = process.env.PORT || 4000;
 app.use(cors());
 
+
+
+
+//api endpoints
+=======
 const store_id = process.env.STORE_ID;
 const store_passwd = process.env.STORE_PASSWORD;
 const is_live = false;
+
 
 // Middleware
 app.use(express.json()); // For parsing JSON request body

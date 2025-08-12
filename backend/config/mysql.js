@@ -1,3 +1,4 @@
+
 import mysql from "mysql2";
 
 // Initialize the database connection
@@ -16,6 +17,7 @@ const db = await mysql.createConnection({
 console.log("Connected to MySQL database.");
 
 // Define the table creation query
+
 const createNewTableQuery = `
     CREATE TABLE IF NOT EXISTS students (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -43,6 +45,7 @@ const createNewTableQuery = `
     );
 `;
 
+
 // Execute the query correctly without callback
 try {
     const [results] = await db.query(createNewTableQuery);
@@ -53,4 +56,5 @@ try {
 }
 
 // Export the database connection
+
 export default db;
