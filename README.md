@@ -155,4 +155,4 @@ will be uploaded soon!!
 
 
 🪪 License
-SUST © 2025 [Shakera-Nivrita / SUST]
+SUST © 2025 [Nivrita-Shakera / SUST]
